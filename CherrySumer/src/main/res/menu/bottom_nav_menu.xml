@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="홈" />
+    <item
+        android:id="@+id/nav_posts"
+        android:icon="@drawable/ic_posts"
+        android:title="게시글" />
+    <item
+        android:id="@+id/nav_chats"
+        android:icon="@drawable/ic_chats"
+        android:title="채팅" />
+    <item
+        android:id="@+id/nav_inventory"
+        android:icon="@drawable/ic_inventory"
+        android:title="재고" />
+    <item
+        android:id="@+id/nav_mypage"
+        android:icon="@drawable/ic_mypage"
+        android:title="마이페이지" />
+</menu>

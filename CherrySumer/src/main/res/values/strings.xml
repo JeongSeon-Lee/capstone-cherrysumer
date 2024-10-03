@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">CherrySumer</string>
+
+    <!-- 카테고리 선택 배열 -->
+    <string-array name="category_array">
+        <item>카테고리</item>
+        <item>과일 / 채소</item>
+        <item>배달</item>
+        <item>정육</item>
+        <item>냉동식품</item>
+        <item>수산물</item>
+        <item>음료</item>
+        <item>간편식</item>
+        <item>디저트</item>
+        <item>생활용품</item>
+    </string-array>
+
+    <!-- 정렬 기준 배열 -->
+    <string-array name="sort_array">
+        <item>최신 등록 순</item>
+        <item>만료 임박 순</item>
+        <item>만료 여유 순</item>
+        <item>재고 많은 순</item>
+        <item>재고 적은 순</item>
+    </string-array>
+</resources>
