@@ -6,25 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".InventoryActivity">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:titleTextColor="#121212"/>
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="tabs"/>
+    tools:context=".MainActivity">
 
     <FrameLayout
-        android:id="@+id/tab_content"
+        android:id="@+id/nav_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

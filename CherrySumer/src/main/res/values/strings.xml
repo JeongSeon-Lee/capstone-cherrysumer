@@ -23,4 +23,6 @@
         <item>재고 많은 순</item>
         <item>재고 적은 순</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
