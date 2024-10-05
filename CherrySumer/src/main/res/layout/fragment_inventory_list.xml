@@ -29,6 +29,15 @@
             android:minHeight="48dp"
             android:padding="12dp" />
 
+        <Spinner
+            android:id="@+id/stock_location_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/stock_location_array"
+            android:minHeight="48dp"
+            android:padding="12dp" />
+
         <ImageButton
             android:id="@+id/help_button"
             android:layout_width="48dp"

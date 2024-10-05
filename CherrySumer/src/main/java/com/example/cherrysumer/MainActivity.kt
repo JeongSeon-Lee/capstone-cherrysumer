@@ -28,4 +28,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        // 프래그먼트 스택이 있을 경우 pop
+        return if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+            true
+        } else {
+            super.onSupportNavigateUp() // 기본 동작을 호출
+        }
+    }
 }

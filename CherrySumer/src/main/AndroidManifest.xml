@@ -13,10 +13,13 @@
         android:theme="@style/Theme.CherrySumer"
         tools:targetApi="31"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:name=".MyApplication">
+        android:launchMode="standard"
+        android:name=".retrofit.MyApplication">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

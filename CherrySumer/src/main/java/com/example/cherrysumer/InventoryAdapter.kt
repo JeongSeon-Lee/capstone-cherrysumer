@@ -9,12 +9,13 @@ import androidx.annotation.RequiresApi
 import java.time.format.DateTimeFormatter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherrysumer.databinding.ItemInventoryBinding
+import com.example.cherrysumer.retrofit.models.InventoryItem
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 class InventoryViewHolder(val binding: ItemInventoryBinding): RecyclerView.ViewHolder(binding.root)
 
-class InventoryAdapter(val inventoryItems: List<InventoryItemModel>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class InventoryAdapter(val inventoryItems: List<InventoryItem>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun getItemCount(): Int{
         return inventoryItems?.size ?: 1
@@ -42,23 +43,24 @@ class InventoryAdapter(val inventoryItems: List<InventoryItemModel>): RecyclerVi
 
         binding.itemProductName.text = model.productName
         binding.itemExpirationDate.text = "~${expirationDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))}"
-        binding.itemDetailedCategory.text = "${model.detailedCategory}"
+        binding.itemCategory.text = model.category ?: ""
         binding.itemQuantity.text = "${model.quantity}"
-        binding.itemIcon.setImageResource(when {
-            model.detailedCategory.contains("과일 / 채소") -> R.drawable.ic_fruit
-            model.detailedCategory.contains("배달") -> R.drawable.ic_delievery
-            model.detailedCategory.contains("정육") -> R.drawable.ic_meat
-            model.detailedCategory.contains("냉동식품") -> R.drawable.ic_frozen_food
-            model.detailedCategory.contains("수산물") -> R.drawable.ic_fish
-            model.detailedCategory.contains("음료") -> R.drawable.ic_drink
-            model.detailedCategory.contains("간편식") -> R.drawable.ic_convenience_food
-            model.detailedCategory.contains("디저트") -> R.drawable.ic_dessert
-            model.detailedCategory.contains("생활용품") -> R.drawable.ic_daily_necessity
+        binding.itemIcon.setImageResource(when (model.category) {
+            "과일" -> R.drawable.ic_fruit
+            "채소" -> R.drawable.ic_cherry   // 이미지 바꿔야 함
+            "정육" -> R.drawable.ic_meat
+            "냉동식품" -> R.drawable.ic_frozen_food
+            "수산물" -> R.drawable.ic_fish
+            "음료" -> R.drawable.ic_drink
+            "간편식" -> R.drawable.ic_convenience_food
+            "디저트" -> R.drawable.ic_dessert
+            "생활용품" -> R.drawable.ic_daily_necessity
+            "유제품" -> R.drawable.ic_cherry  // 이미지 바꿔야 함
             else -> R.drawable.ic_cherry
         })
         binding.itemDday.text = when {
             daysLeft > 0 -> "D-${daysLeft}"
-            daysLeft.toInt() == 0 -> "D-DAY"
+            daysLeft == 0L -> "D-DAY"
             else -> "D+${-daysLeft}"
         }
         if (daysLeft <= 0) {

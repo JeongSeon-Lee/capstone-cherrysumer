@@ -1,4 +1,4 @@
-package com.example.cherrysumer
+package com.example.cherrysumer.retrofit
 
 import android.content.Context
 import android.util.Log

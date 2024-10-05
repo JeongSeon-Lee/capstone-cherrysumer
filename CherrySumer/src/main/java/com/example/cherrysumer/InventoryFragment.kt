@@ -2,10 +2,11 @@ package com.example.cherrysumer
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -23,6 +24,7 @@ class InventoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentInventoryBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
 
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()
@@ -58,7 +60,7 @@ class InventoryFragment : Fragment() {
 
         binding.inventoryAdd.setOnClickListener {
             val popupMenu = PopupMenu(requireContext(), it)
-            popupMenu.menuInflater.inflate(R.menu.inventory_menu, popupMenu.menu)
+            popupMenu.menuInflater.inflate(R.menu.inventory_insert_menu, popupMenu.menu)
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
@@ -83,5 +85,29 @@ class InventoryFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu, menu) // 메뉴 리소스를 Inflate합니다.
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_search -> {
+                // 검색 버튼 클릭 시 SearchFragment로 이동합니다.
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                val bundle = Bundle().apply {
+                    putBoolean("USE_FIRST_LAYOUT", true) // 첫 번째 레이아웃 사용 조건 전달
+                }
+                val searchFragment = SearchFragment()
+                searchFragment.arguments = bundle
+                transaction?.replace(R.id.nav_content, searchFragment)
+                transaction?.addToBackStack(null)
+                transaction?.commit()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

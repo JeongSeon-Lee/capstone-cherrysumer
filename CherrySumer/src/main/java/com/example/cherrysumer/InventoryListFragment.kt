@@ -17,16 +17,16 @@ import android.widget.AdapterView
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherrysumer.databinding.FragmentInventoryListBinding
-import com.example.cherrysumer.retrofit.ApiResponse
-import com.example.cherrysumer.retrofit.ErrorResponse
-import com.example.cherrysumer.retrofit.INetworkService
-import com.google.gson.Gson
+import com.example.cherrysumer.retrofit.models.ApiResponse
+import com.example.cherrysumer.retrofit.ApiService
+import com.example.cherrysumer.retrofit.MyApplication
+import com.example.cherrysumer.retrofit.models.InventoryItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +34,9 @@ import retrofit2.Response
 class InventoryListFragment : Fragment() {
 
     private var param: String? = null
+    private lateinit var inventoryItems: List<InventoryItem>
+    private lateinit var binding: FragmentInventoryListBinding
+    private lateinit var filteredItems: List<InventoryItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,131 +50,232 @@ class InventoryListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentInventoryListBinding.inflate(inflater, container, false)
-        val networkService: INetworkService = MyApplication.networkService
-        val call: Call<ApiResponse<List<InventoryItemModel>>> = networkService.getInventoryItems()
+        binding = FragmentInventoryListBinding.inflate(inflater, container, false)
+        val networkService: ApiService = MyApplication.networkService
+
+        // 초기 UI 설정
+        when (param) {
+            "냉장실", "냉동실", "실외 저장소" -> {
+                binding.helpButton.visibility = View.VISIBLE
+                binding.stockLocationSpinner.visibility = View.GONE
+            }
+            else -> {
+                binding.helpButton.visibility = View.GONE
+                binding.stockLocationSpinner.visibility = View.VISIBLE
+            }
+        }
 
         binding.helpButton.setOnClickListener {
             val inflater = LayoutInflater.from(requireContext())
             val tooltipView = inflater.inflate(R.layout.tooltip_layout, null)
 
-            // PopupWindow 생성 (가로 사이즈를 MATCH_PARENT로 설정)
+            // PopupWindow 생성
             val popupWindow = PopupWindow(
                 tooltipView,
-                ViewGroup.LayoutParams.MATCH_PARENT, // 전체 화면 너비
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 true
             )
-
-            // 툴팁을 화면에 표시
             popupWindow.showAsDropDown(it, 0, 0)
 
             // 몇 초 뒤에 팝업을 닫도록 설정
-            tooltipView.postDelayed({
-                popupWindow.dismiss()
-            }, 5000)
+            tooltipView.postDelayed({ popupWindow.dismiss() }, 5000)
         }
 
-        call.enqueue(object : Callback<ApiResponse<List<InventoryItemModel>>> {
+        // 서버에서 데이터 요청
+        fetchInventoryItems(networkService, binding)
+
+        return binding.root
+    }
+
+    private fun fetchInventoryItems(networkService: ApiService, binding: FragmentInventoryListBinding) {
+        networkService.getInventoryItems().enqueue(object : Callback<ApiResponse<List<InventoryItem>>> {
             override fun onResponse(
-                call: Call<ApiResponse<List<InventoryItemModel>>>,
-                response: Response<ApiResponse<List<InventoryItemModel>>>
+                call: Call<ApiResponse<List<InventoryItem>>>,
+                response: Response<ApiResponse<List<InventoryItem>>>
             ) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null && apiResponse.isSuccess) {
-                        val inventoryItems = apiResponse.data?.filter { it.stockLocation == param } ?: listOf()
+                        inventoryItems = if (param in listOf("냉장실", "냉동실", "실외 저장소")) {
+                            apiResponse.data?.filter { it.stockLocation == param }?.sortedByDescending { it.createdAt } ?: listOf() ?: listOf()
+                        } else {
+                            apiResponse.data?.filter {
+                                it.productName?.contains(param ?: "", ignoreCase = true) == true
+                            }?.sortedByDescending { it.createdAt } ?: listOf()
+                        }
+
+                        Log.d("InventoryListFragment", "Received ApiResponse: $apiResponse")
+                        Log.d("InventoryListFragment", "Received Inventory Items: $inventoryItems")
+
                         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
                         binding.recyclerView.adapter = InventoryAdapter(inventoryItems)
 
-                        Toast.makeText(activity, "데이터 로딩 성공", Toast.LENGTH_SHORT).show()
-                        Log.d("InventoryListFragment", "Loaded items count: ${inventoryItems.size}")
+                        if (activity != null) Toast.makeText(activity, "데이터 로딩 성공", Toast.LENGTH_SHORT).show()
 
-                        // 카테고리 필터링
-                        binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                                val selectedCategory = binding.categorySpinner.selectedItem.toString()
-                                val filteredItems = if (selectedCategory == "카테고리") {
-                                    inventoryItems
-                                } else {
-                                    inventoryItems.filter { it.detailedCategory.contains(selectedCategory) }
-                                }
-                                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>) {}
-                        }
-
-                        // 정렬 기능
-                        binding.sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                                val selectedSort = binding.sortSpinner.selectedItem.toString()
-                                val sortedItems = when (selectedSort) {
-                                    "만료 임박 순" -> inventoryItems.sortedBy { it.expirationDate }
-                                    "만료 여유 순" -> inventoryItems.sortedByDescending { it.expirationDate }
-                                    "재고 많은 순" -> inventoryItems.sortedByDescending { it.quantity }
-                                    "재고 적은 순" -> inventoryItems.sortedBy { it.quantity }
-                                    else -> inventoryItems
-                                }
-                                binding.recyclerView.adapter = InventoryAdapter(sortedItems)
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>) {}
-                        }
-
-                        // 스와이프 컨트롤러 설정
-                        val swipeController = SwipeController()
-                        swipeController.setButtonActionListener(object : SwipeControllerActions {
-                            override fun onLeftClicked(position: Int) {
-                                super.onLeftClicked(position)
-                                // 왼쪽 클릭 동작
-                            }
-
-                            override fun onRightClicked(position: Int) {
-                                // 오른쪽 클릭 동작 (예: 아이템 삭제)
-                                // InventoryAdapter.delData(position)
-                            }
-                        })
-                        val itemTouchHelper = ItemTouchHelper(swipeController)
-                        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
-                        binding.recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-                            override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-                                swipeController.onDraw(c)
-                            }
-                        })
+                        setupFilters(binding)
+                        setupSwipeController(binding)
                     } else {
-                        // isSuccess가 false일 때 처리
-                        val errorMessage = apiResponse?.message ?: "Unknown error"
-                        Log.e("InventoryListFragment", "Error: ${apiResponse?.code} - $errorMessage")
-                        Toast.makeText(activity, "Error: ${apiResponse?.message}", Toast.LENGTH_SHORT).show()
+                        handleApiError(apiResponse)
                     }
                 } else {
-                    // 서버가 비정상적인 응답을 반환한 경우 (예: 401, 502 등)
-                    val errorBody = response.errorBody()?.string()
-                    if (errorBody != null) {
-                        try {
-                            val gson = Gson()
-                            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-                            Log.e("InventoryListFragment", "Error: ${errorResponse.code} - ${errorResponse.message}")
-                            Toast.makeText(activity, "Error: ${errorResponse.message}", Toast.LENGTH_SHORT).show()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            Toast.makeText(activity, "Unknown error", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(activity, "Unknown error", Toast.LENGTH_SHORT).show()
-                    }
+                    handleErrorResponse(response)
                 }
             }
 
-            override fun onFailure(call: Call<ApiResponse<List<InventoryItemModel>>>, t: Throwable) {
-                // 네트워크 오류 또는 파싱 오류 처리
+            override fun onFailure(call: Call<ApiResponse<List<InventoryItem>>>, t: Throwable) {
                 Log.e("InventoryListFragment", "Network Failure: ${t.message}", t)
-                Toast.makeText(activity, "Network Failure: ${t.message}", Toast.LENGTH_SHORT).show()
+                if (activity != null)
+                    Toast.makeText(activity, "Network Failure: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
 
-        return binding.root
+    private fun setupFilters(binding: FragmentInventoryListBinding) {
+        // 필터링할 아이템 리스트를 저장하는 변수
+        filteredItems = inventoryItems
+
+        // 카테고리 필터링
+        binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedCategory = binding.categorySpinner.selectedItem.toString()
+
+                // 카테고리 필터링
+                filteredItems = if (selectedCategory == "카테고리") {
+                    inventoryItems // 모든 아이템
+                } else {
+                    inventoryItems.filter { it.category == selectedCategory } // 선택한 카테고리로 필터링
+                }
+
+                // 필터링된 아이템을 기반으로 업데이트
+                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // 아무것도 선택되지 않았을 때의 기본 동작
+                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+            }
+        }
+
+        // 정렬 기능
+        binding.sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedSort = binding.sortSpinner.selectedItem.toString()
+                filteredItems = when (selectedSort) {
+                    "최신 등록 순" -> filteredItems.sortedByDescending { it.createdAt }
+                    "만료 임박 순" -> filteredItems.sortedBy { it.expirationDate }
+                    "만료 여유 순" -> filteredItems.sortedByDescending { it.expirationDate }
+                    "재고 많은 순" -> filteredItems.sortedByDescending { it.quantity }
+                    "재고 적은 순" -> filteredItems.sortedBy { it.quantity }
+                    else -> filteredItems
+                }
+
+                // 필터링된 아이템을 기반으로 업데이트
+                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+            }
+        }
+
+        // 재고 위치 필터링
+        binding.stockLocationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedStockLocation = binding.stockLocationSpinner.selectedItem.toString()
+                filteredItems = when (selectedStockLocation) {
+                    "냉장실", "냉동실", "실외 저장소" -> filteredItems.filter { it.stockLocation == selectedStockLocation }
+                    else -> filteredItems // 다른 재고 위치는 필터링하지 않음
+                }
+
+                // 필터링된 아이템을 기반으로 업데이트
+                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+            }
+        }
+    }
+
+    private fun setupSwipeController(binding: FragmentInventoryListBinding) {
+        // 스와이프 컨트롤러 설정
+        val swipeController = SwipeController()
+        swipeController.setButtonActionListener(object : SwipeControllerActions {
+            override fun onRightClicked(position: Int) {
+                // 오른쪽 클릭 시 아이템 삭제 확인 대화상자 표시
+                val itemToDelete = filteredItems[position]
+                Log.d("SwipeController", "Deleting item: ${itemToDelete.productName} with ID: ${itemToDelete.id}")
+
+                // 삭제 확인 대화상자
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("삭제 확인")
+                builder.setMessage("정말 ${itemToDelete.productName}을(를) 삭제하시겠습니까?")
+                builder.setPositiveButton("확인") { _, _ ->
+                    deleteInventoryItem(itemToDelete) // 아이템 삭제 메소드 호출
+                }
+                builder.setNegativeButton("취소", null) // 취소 버튼
+                builder.show()
+            }
+        })
+        val itemTouchHelper = ItemTouchHelper(swipeController)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+        binding.recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+                swipeController.onDraw(c)
+            }
+        })
+    }
+
+    private fun deleteInventoryItem(item: InventoryItem) {
+        val networkService: ApiService = MyApplication.networkService
+        Log.d("DeleteInventoryItem", "Deleting item with ID: ${item.id}") // 추가된 로그
+        networkService.deleteInventoryItem(item.id).enqueue(object : Callback<ApiResponse<Unit>> {
+            override fun onResponse(call: Call<ApiResponse<Unit>>, response: Response<ApiResponse<Unit>>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(activity, "아이템이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+
+                    // 삭제된 아이템을 제외한 새로운 filteredItems 생성
+                    filteredItems = filteredItems.filter { it.id != item.id }
+
+                    // RecyclerView 어댑터 업데이트
+                    binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+
+                    // 아이템 삭제 후 다시 데이터 요청
+                    // fetchInventoryItems(networkService, binding)
+                } else {
+                    // 에러 로그 추가
+                    Log.e("DeleteInventoryItem", "Error deleting item: ${response.errorBody()?.string()}")
+                    Toast.makeText(activity, "삭제 실패: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse<Unit>>, t: Throwable) {
+                Toast.makeText(activity, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    private fun handleApiError(apiResponse: ApiResponse<List<InventoryItem>>?) {
+        val errorMessage = apiResponse?.message ?: "Unknown error"
+        Log.e("InventoryListFragment", "Error: ${apiResponse?.code} - $errorMessage")
+        if (activity != null) Toast.makeText(activity, "Error: ${apiResponse?.message}", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun handleErrorResponse(response: Response<ApiResponse<List<InventoryItem>>>) {
+        val errorBody = response.errorBody()?.string()
+        if (errorBody != null) {
+            try {
+                Log.e("InventoryListFragment", "Error Body: $errorBody")
+                if (activity != null) Toast.makeText(activity, "Error Body: $errorBody", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                if (activity != null) Toast.makeText(activity, "Unknown error", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            if (activity != null) Toast.makeText(activity, "Unknown error", Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
@@ -186,6 +290,7 @@ class InventoryListFragment : Fragment() {
         }
     }
 }
+
 
 enum class ButtonsState {
     GONE,
