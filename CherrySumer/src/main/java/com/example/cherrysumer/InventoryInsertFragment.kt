@@ -11,12 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.example.cherrysumer.databinding.FragmentInventoryInsertBinding
-import com.example.cherrysumer.retrofit.MyApplication
+import com.example.cherrysumer.retrofit.ApiCallback
+import com.example.cherrysumer.retrofit.ApiManager
 import com.example.cherrysumer.retrofit.models.ApiResponse
 import com.example.cherrysumer.retrofit.models.InventoryItem
 import com.google.android.material.chip.Chip
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -35,6 +34,26 @@ class InventoryInsertFragment : Fragment() {
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         (activity as? AppCompatActivity)?.supportActionBar?.title = "재고 추가"
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // 구매 날짜 입력 설정
+        val purchaseDateInput = binding.purchaseDateInput
+
+        purchaseDateInput.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePicker = DatePickerDialog(
+                requireContext(),
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    val formattedDate = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                    purchaseDateInput.setText(formattedDate)
+                },
+                year, month, day
+            )
+            datePicker.show()
+        }
 
         // 유통기한 입력 설정
         val expirationDateInput = binding.expirationDateInput
@@ -71,7 +90,6 @@ class InventoryInsertFragment : Fragment() {
             } else {
                 null
             }
-            Toast.makeText(requireContext(), "Selected stock location: $selectedStockLocation", Toast.LENGTH_SHORT).show()
         }
 
         // 카테고리 추가
@@ -91,6 +109,7 @@ class InventoryInsertFragment : Fragment() {
 
             val productName = binding.productNameInput.text.toString()
             val expirationDateInputString = binding.expirationDateInput.text.toString()
+            val purchaseDateInputString = binding.purchaseDateInput.text.toString()
 
             // String을 LocalDate로 변환 후 자정 시간으로 LocalDateTime으로 변환
             val expirationDate = try {
@@ -98,6 +117,13 @@ class InventoryInsertFragment : Fragment() {
                     .atTime(23, 59, 59)
             } catch (e: Exception) {
                 Log.e("InventoryInsert", "Failed to parse expiration date", e)
+                null
+            }
+            val purchaseDate = try {
+                LocalDate.parse(purchaseDateInputString, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .atTime(23, 59, 59)
+            } catch (e: Exception) {
+                Log.e("InventoryInsert", "Failed to parse purchase date", e)
                 null
             }
 
@@ -110,6 +136,7 @@ class InventoryInsertFragment : Fragment() {
                     updatedAt = "",
                     id = 0,
                     productName = productName,
+                    purchaseDate = purchaseDate.toString(),
                     expirationDate = expirationDate.toString(), // 서버와의 통신을 위해 String으로 변환
                     quantity = quantity,
                     stockLocation = stockLocation,
@@ -120,25 +147,21 @@ class InventoryInsertFragment : Fragment() {
                 Log.d("InventoryInsert", "Inventory Item: $inventoryItem")
 
                 // 서버에 데이터 전송
-                MyApplication.networkService.insertInventory(inventoryItem)
-                    .enqueue(object : Callback<ApiResponse<Unit>> {
-                        override fun onResponse(call: Call<ApiResponse<Unit>>, response: Response<ApiResponse<Unit>>) {
-                            if (response.isSuccessful && response.body()?.isSuccess == true) {
-                                Toast.makeText(context, response.body()?.message ?: "재고가 성공적으로 추가되었습니다.", Toast.LENGTH_SHORT).show()
-                                // 이전 프래그먼트로 돌아가기
-                                requireActivity().supportFragmentManager.popBackStack()
-                            } else {
-                                val errorBody = response.errorBody()?.string()
-                                Log.e("InventoryInsert", "Error: $errorBody")
-                                Toast.makeText(context, response.body()?.message ?: "재고 추가에 실패했습니다. 오류: $errorBody", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        override fun onFailure(call: Call<ApiResponse<Unit>>, t: Throwable) {
-                            Toast.makeText(context, "서버와 통신에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                            t.printStackTrace()
-                        }
-                    })
+                ApiManager().insertInventoryItem(inventoryItem, object : ApiCallback<Unit> {
+                    override fun onSuccess(apiResponse: ApiResponse<Unit>?) {
+                        requireActivity().supportFragmentManager.popBackStack()
+                        Toast.makeText(activity, "재고를 추가하였습니다.", Toast.LENGTH_SHORT).show()
+                        super.onSuccess(apiResponse)
+                    }
+                    override fun onError(response: Response<ApiResponse<Unit>>) {
+                        Toast.makeText(activity, "재고 추가에 실패했습니다 (HTTP ${response.code()})", Toast.LENGTH_SHORT).show()
+                        super.onError(response)
+                    }
+                    override fun onFailure(throwable: Throwable) {
+                        Toast.makeText(activity, "네트워크 오류: ${throwable.message}", Toast.LENGTH_SHORT).show()
+                        super.onFailure(throwable)
+                    }
+                })
             } else {
                 Toast.makeText(context, "모든 필드를 입력하세요.", Toast.LENGTH_SHORT).show()
             }

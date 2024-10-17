@@ -29,14 +29,12 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-
             <!-- 상품명 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="상품명"
                 android:textSize="16sp" />
-
             <EditText
                 android:id="@+id/productNameInput"
                 android:layout_width="match_parent"
@@ -44,20 +42,48 @@
                 android:hint="상품명을 입력하세요" />
 
             <!-- 유통기한 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="유통기한"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/expirationDateInput"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="false"
-                android:hint="유통기한을 입력하세요" />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="유통기한"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/purchaseDateInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:hint="구매 날짜"
+                        android:padding="8dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:gravity="center" />
+                    <EditText
+                        android:id="@+id/expirationDateInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:hint="유통기한"
+                        android:padding="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+
 
             <!-- 수량 -->
             <TextView

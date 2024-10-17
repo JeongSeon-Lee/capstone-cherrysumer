@@ -48,6 +48,7 @@ class InventoryAdapter(val inventoryItems: List<InventoryItem>): RecyclerView.Ad
         binding.itemIcon.setImageResource(when (model.category) {
             "과일" -> R.drawable.ic_fruit
             "채소" -> R.drawable.ic_cherry   // 이미지 바꿔야 함
+            "유제품" -> R.drawable.ic_cherry  // 이미지 바꿔야 함
             "정육" -> R.drawable.ic_meat
             "냉동식품" -> R.drawable.ic_frozen_food
             "수산물" -> R.drawable.ic_fish
@@ -55,7 +56,6 @@ class InventoryAdapter(val inventoryItems: List<InventoryItem>): RecyclerView.Ad
             "간편식" -> R.drawable.ic_convenience_food
             "디저트" -> R.drawable.ic_dessert
             "생활용품" -> R.drawable.ic_daily_necessity
-            "유제품" -> R.drawable.ic_cherry  // 이미지 바꿔야 함
             else -> R.drawable.ic_cherry
         })
         binding.itemDday.text = when {
@@ -69,5 +69,10 @@ class InventoryAdapter(val inventoryItems: List<InventoryItem>): RecyclerView.Ad
         if (model.quantity <= 1) {
             binding.itemQuantity.setBackgroundColor(Color.parseColor("#FF8B8B"))
         }
+    }
+
+    // 현재 아이템 리스트를 반환하는 메소드
+    fun getCurrentItems(): List<InventoryItem> {
+        return inventoryItems
     }
 }

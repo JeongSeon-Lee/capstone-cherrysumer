@@ -4,6 +4,6 @@
         android:id="@+id/menu_direct_input"
         android:title="직접 입력" />
     <item
-        android:id="@+id/menu_receipt_scan"
-        android:title="영수증 촬영" />
+        android:id="@+id/menu_import_purchase"
+        android:title="공동구매 가져오기" />
 </menu>

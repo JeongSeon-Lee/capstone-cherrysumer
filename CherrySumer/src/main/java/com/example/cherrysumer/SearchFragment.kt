@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment
 import com.example.cherrysumer.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment() {
-
     private lateinit var binding: FragmentSearchBinding
     private var useFirstLayout: Boolean = true // 초기 레이아웃 상태
     private var isFirstOpen: Boolean = true // 프래그먼트가 처음 열렸는지 여부
@@ -68,7 +67,7 @@ class SearchFragment : Fragment() {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     query?.let {
                         // 쿼리 제출 시 InventoryListFragment로 이동
-                        val inventoryListFragment = InventoryListFragment.newInstance(query) // 쿼리를 인수로 전달하여 생성
+                        val inventoryListFragment = InventoryListFragment.newInstance("", query) // 쿼리를 인수로 전달하여 생성
                         // FragmentTransaction을 사용하여 Fragment 교체
                         parentFragmentManager.beginTransaction()
                             .replace(R.id.inventory_list_content, inventoryListFragment) // nav_content는 프래그먼트를 교체할 컨테이너 ID입니다.
@@ -183,5 +182,5 @@ class SearchFragment : Fragment() {
         binding.root.removeAllViews() // 기존 뷰 제거
         binding.root.addView(searchView) // 새로운 뷰 추가
     }
-    }
+}
 

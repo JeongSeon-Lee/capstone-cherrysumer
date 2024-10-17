@@ -28,7 +28,7 @@ class InventoryFragment : Fragment() {
 
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()
-                .replace(R.id.tab_content, InventoryListFragment.newInstance("냉장실"))
+                .replace(R.id.tab_content, InventoryListFragment.newInstance("냉장실", ""))
                 .commit()
         }
 
@@ -45,9 +45,9 @@ class InventoryFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val transaction = childFragmentManager.beginTransaction()
                 when (tab?.text) {
-                    "냉장실" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("냉장실"))
-                    "냉동실" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("냉동실"))
-                    "실외 저장소" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("실외 저장소"))
+                    "냉장실" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("냉장실", ""))
+                    "냉동실" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("냉동실", ""))
+                    "실외 저장소" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("실외 저장소", ""))
                     else -> return
                 }
                 transaction?.commit()
@@ -65,16 +65,13 @@ class InventoryFragment : Fragment() {
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.menu_direct_input -> {
-                        // 직접 입력 선택 시 동작
                         val transaction = activity?.supportFragmentManager?.beginTransaction()
                         transaction?.replace(R.id.nav_content, InventoryInsertFragment())
                         transaction?.addToBackStack(null)
                         transaction?.commit()
                         true
                     }
-                    R.id.menu_receipt_scan -> {
-                        // 영수증 촬영 선택 시 동작
-                        Toast.makeText(requireContext(), "영수증 촬영 선택됨", Toast.LENGTH_SHORT).show()
+                    R.id.menu_import_purchase -> {
                         true
                     }
                     else -> false

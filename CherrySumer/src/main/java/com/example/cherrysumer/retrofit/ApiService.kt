@@ -8,14 +8,18 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
-    @GET("inventory")
-    fun getInventoryItems(): Call<ApiResponse<List<InventoryItem>>>
+    @GET("inventory/location/{stockLocation}")
+    fun listInventoryItems(@Path("stockLocation") stockLocation: String): Call<ApiResponse<List<InventoryItem>>>
 
-    @POST("inventory/insert")
-    fun insertInventory(@Body item: InventoryItem): Call<ApiResponse<Unit>>
+    @GET("inventory/search")
+    fun searchInventoryItems(@Query("query") query: String): Call<ApiResponse<List<InventoryItem>>>
 
     @DELETE("inventory/{id}")
     fun deleteInventoryItem(@Path("id") itemId: Int): Call<ApiResponse<Unit>>
+
+    @POST("inventory/insert")
+    fun insertInventoryItem(@Body item: InventoryItem): Call<ApiResponse<Unit>>
 }
