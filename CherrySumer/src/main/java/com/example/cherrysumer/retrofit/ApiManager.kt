@@ -3,6 +3,7 @@ package com.example.cherrysumer.retrofit
 import android.util.Log
 import com.example.cherrysumer.retrofit.models.ApiResponse
 import com.example.cherrysumer.retrofit.models.InventoryItem
+import com.example.cherrysumer.retrofit.models.PostItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +27,17 @@ class ApiManager {
         apiService.insertInventoryItem(item).enqueue(createCallback(callback))
     }
 
+    fun editInventoryItem(id: Int, item: InventoryItem, callback: ApiCallback<Unit>) {
+        apiService.editInventoryItem(id, item).enqueue(createCallback(callback))
+    }
+
+    fun registerPostItem(id: Long, callback: ApiCallback<Unit>) {
+        apiService.registerPostItem(id).enqueue(createCallback(callback))
+    }
+
+    fun listPostItems(filter: String, callback: ApiCallback<List<PostItem>>) {
+        apiService.listPostItems(filter).enqueue(createCallback(callback))
+    }
     private fun <T> createCallback(callback: ApiCallback<T>): Callback<ApiResponse<T>> {
         return object : Callback<ApiResponse<T>> {
             override fun onResponse(call: Call<ApiResponse<T>>, response: Response<ApiResponse<T>>) {

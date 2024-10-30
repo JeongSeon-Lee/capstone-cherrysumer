@@ -2,6 +2,7 @@ package com.example.cherrysumer.retrofit
 
 import com.example.cherrysumer.retrofit.models.InventoryItem
 import com.example.cherrysumer.retrofit.models.ApiResponse
+import com.example.cherrysumer.retrofit.models.PostItem
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -22,4 +23,14 @@ interface ApiService {
 
     @POST("inventory/insert")
     fun insertInventoryItem(@Body item: InventoryItem): Call<ApiResponse<Unit>>
+
+    @POST("inventory/edit/{id}")
+    fun editInventoryItem(@Path("id") itemId: Int, @Body item: InventoryItem): Call<ApiResponse<Unit>>
+
+    @GET("inventory/register/{postId}")
+    fun registerPostItem(@Path("postId") postId: Long): Call<ApiResponse<Unit>>
+
+    @GET("mypage/applications/{filter}")
+    fun listPostItems(@Path("filter") filter: String): Call<ApiResponse<List<PostItem>>>
+
 }

@@ -24,38 +24,41 @@ class InventoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentInventoryBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
 
-        if (savedInstanceState == null) {
-            childFragmentManager.beginTransaction()
-                .replace(R.id.tab_content, InventoryListFragment.newInstance("냉장실", ""))
-                .commit()
-        }
+        setHasOptionsMenu(true)
 
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         (activity as? AppCompatActivity)?.supportActionBar?.title = "나의 재고"
 
-        binding.tabs.apply {
-            addTab(newTab().setText("냉장실"))
-            addTab(newTab().setText("냉동실"))
-            addTab(newTab().setText("실외 저장소"))
+        val stockLocation = arguments?.getString("stockLocation") ?: getString(R.string.fridge)
+        if (savedInstanceState == null) {
+            childFragmentManager.beginTransaction()
+                .replace(R.id.tab_content, InventoryListFragment.newInstance(stockLocation, ""))
+                .commit()
         }
-
+        binding.tabs.apply {
+            addTab(newTab().setText(getString(R.string.fridge)))
+            addTab(newTab().setText(getString(R.string.freezer)))
+            addTab(newTab().setText(getString(R.string.outdoor_storage)))
+            when (stockLocation) {
+                getString(R.string.fridge) -> selectTab(getTabAt(0))
+                getString(R.string.freezer) -> selectTab(getTabAt(1))
+                getString(R.string.outdoor_storage) -> selectTab(getTabAt(2))
+            }
+        }
         binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val transaction = childFragmentManager.beginTransaction()
                 when (tab?.text) {
-                    "냉장실" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("냉장실", ""))
-                    "냉동실" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("냉동실", ""))
-                    "실외 저장소" -> transaction?.replace(R.id.tab_content, InventoryListFragment.newInstance("실외 저장소", ""))
+                    getString(R.string.fridge) -> transaction.replace(R.id.tab_content, InventoryListFragment.newInstance(getString(R.string.fridge), ""))
+                    getString(R.string.freezer) -> transaction.replace(R.id.tab_content, InventoryListFragment.newInstance(getString(R.string.freezer), ""))
+                    getString(R.string.outdoor_storage) -> transaction.replace(R.id.tab_content, InventoryListFragment.newInstance(getString(R.string.outdoor_storage), ""))
                     else -> return
                 }
-                transaction?.commit()
+                transaction.commit()
             }
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
         })
 
         binding.inventoryAdd.setOnClickListener {
@@ -72,6 +75,10 @@ class InventoryFragment : Fragment() {
                         true
                     }
                     R.id.menu_import_purchase -> {
+                        val transaction = activity?.supportFragmentManager?.beginTransaction()
+                        transaction?.replace(R.id.nav_content, PostListFragment())
+                        transaction?.addToBackStack(null)
+                        transaction?.commit()
                         true
                     }
                     else -> false
@@ -85,17 +92,16 @@ class InventoryFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_menu, menu) // 메뉴 리소스를 Inflate합니다.
+        inflater.inflate(R.menu.search_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_search -> {
-                // 검색 버튼 클릭 시 SearchFragment로 이동합니다.
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
                 val bundle = Bundle().apply {
-                    putBoolean("USE_FIRST_LAYOUT", true) // 첫 번째 레이아웃 사용 조건 전달
+                    putBoolean("USE_FIRST_LAYOUT", true)
                 }
                 val searchFragment = SearchFragment()
                 searchFragment.arguments = bundle

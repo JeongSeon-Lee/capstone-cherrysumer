@@ -7,8 +7,8 @@ data class InventoryItem(
     @SerializedName("updatedAt") val updatedAt: String,
     @SerializedName("id") val id: Int,
     @SerializedName("productName") val productName: String,
-    @SerializedName("purchase_date") val purchaseDate: String, // 서버에서 문자열로 전달됨
-    @SerializedName("expiration_date") val expirationDate: String, // 서버에서 문자열로 전달됨
+    @SerializedName("purchase_date") val purchaseDate: String,
+    @SerializedName("expiration_date") val expirationDate: String,
     @SerializedName("quantity") val quantity: Int,
     @SerializedName("stockLocation") val stockLocation: String,
     @SerializedName("category") val category: String?

@@ -2,10 +2,12 @@ package com.example.cherrysumer
 
 import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import java.time.format.DateTimeFormatter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherrysumer.databinding.ItemInventoryBinding
@@ -15,7 +17,9 @@ import java.time.LocalDateTime
 
 class InventoryViewHolder(val binding: ItemInventoryBinding): RecyclerView.ViewHolder(binding.root)
 
-class InventoryAdapter(val inventoryItems: List<InventoryItem>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class InventoryAdapter(
+    private val inventoryItems: List<InventoryItem>,
+): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun getItemCount(): Int{
         return inventoryItems?.size ?: 1
@@ -71,7 +75,6 @@ class InventoryAdapter(val inventoryItems: List<InventoryItem>): RecyclerView.Ad
         }
     }
 
-    // 현재 아이템 리스트를 반환하는 메소드
     fun getCurrentItems(): List<InventoryItem> {
         return inventoryItems
     }

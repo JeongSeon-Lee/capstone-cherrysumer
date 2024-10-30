@@ -64,15 +64,13 @@ class InventoryListFragment : Fragment() {
     }
 
     private fun setupFiltersVisibility() {
-        when (stockLocation) {
-            "냉장실", "냉동실", "실외 저장소" -> {
-                binding.helpButton.visibility = View.VISIBLE
-                binding.stockLocationSpinner.visibility = View.GONE
-            }
-            else -> {
-                binding.helpButton.visibility = View.GONE
-                binding.stockLocationSpinner.visibility = View.VISIBLE
-            }
+        val stockLocations = resources.getStringArray(R.array.stock_location_array)
+        if (stockLocation in stockLocations) {
+            binding.helpButton.visibility = View.VISIBLE
+            binding.stockLocationSpinner.visibility = View.GONE
+        } else {
+            binding.helpButton.visibility = View.GONE
+            binding.stockLocationSpinner.visibility = View.VISIBLE
         }
     }
 
@@ -92,8 +90,9 @@ class InventoryListFragment : Fragment() {
     }
 
     private fun fetchInventoryItems(callback: (Boolean) -> Unit = { false }) {
-        if (stockLocation in listOf("냉장실", "냉동실", "실외 저장소")) {
-            ApiManager().listInventoryItems(stockLocation ?: "냉장실", object : ApiCallback<List<InventoryItem>> {
+        val stockLocations = resources.getStringArray(R.array.stock_location_array)
+        if (stockLocation in stockLocations) {
+            ApiManager().listInventoryItems(stockLocation ?: getString(R.string.fridge), object : ApiCallback<List<InventoryItem>> {
                 override fun onSuccess(apiResponse: ApiResponse<List<InventoryItem>>?) {
                     val inventoryItems = apiResponse?.data?.sortedByDescending { it.createdAt } ?: emptyList()
                     binding.recyclerView.adapter = InventoryAdapter(inventoryItems)
@@ -110,7 +109,6 @@ class InventoryListFragment : Fragment() {
                 }
             })
         } else {
-            Log.d("InventoryListFragment", "else")
             ApiManager().searchInventoryItems(searchQuery ?: "", object : ApiCallback<List<InventoryItem>> {
                 override fun onSuccess(apiResponse: ApiResponse<List<InventoryItem>>?) {
                     val inventoryItems = apiResponse?.data?.filter {it.productName?.contains(searchQuery ?: "", ignoreCase = true) == true }?.sortedByDescending { it.createdAt } ?: emptyList()
@@ -163,8 +161,9 @@ class InventoryListFragment : Fragment() {
         binding.stockLocationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedStockLocation = binding.stockLocationSpinner.selectedItem.toString()
+                val stockLocations = resources.getStringArray(R.array.stock_location_array)
                 val filteredItems =
-                    if (selectedStockLocation in listOf("냉장실", "냉동실", "실외 저장소"))
+                    if (selectedStockLocation in stockLocations)
                         currentItems.filter { it.stockLocation == selectedStockLocation }
                     else currentItems
                 binding.recyclerView.adapter = InventoryAdapter(filteredItems)
@@ -187,6 +186,26 @@ class InventoryListFragment : Fragment() {
                 }
                 builder.setNegativeButton("취소", null)
                 builder.show()
+            }
+            override fun onLeftClicked(position: Int) {
+                val currentItems = (binding.recyclerView.adapter as InventoryAdapter).getCurrentItems()
+                val selectedItem = currentItems[position]
+                val inventoryInsertFragment = InventoryInsertFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("source", "editInventoryItem")
+                        putInt("itemIdToEdit", selectedItem.id)
+                        putString("productName", selectedItem.productName)
+                        putString("purchaseDate", selectedItem.purchaseDate)
+                        putString("expirationDate", selectedItem.expirationDate)
+                        putInt("quantity", selectedItem.quantity)
+                        putString("stockLocation", selectedItem.stockLocation)
+                        putString("category", selectedItem.category)
+                    }
+                }
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.nav_content, inventoryInsertFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
         })
         val itemTouchHelper = ItemTouchHelper(swipeController)

@@ -1,0 +1,28 @@
+<LinearLayout
+    android:id="@+id/item_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:layout_margin="8dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:background="#454545"
+        android:gravity="center"
+        android:padding="4dp"
+        android:textSize="12sp"/>
+
+    <Button
+        android:id="@+id/insertInventoryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="재고 등록"
+        android:layout_margin="16dp" />
+
+</LinearLayout>

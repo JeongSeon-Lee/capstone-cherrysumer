@@ -24,6 +24,7 @@ class MyApplication : Application() {
 
         // 임시 토큰 설정 (실제 유효한 테스트 토큰으로 교체)
         saveToken("eyJyZWdEYXRlIjoxNzI3ODU0NzQwMzQzLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMiIsImlzcyI6ImNoZXJyeXN1bWVyIiwiZXhwIjoxNzMwNDQ2NzQwfQ.eOVN_mOOc8B-ch91X43nCzfijBHGBUrvW5OM_ThBPAg")
+        //saveToken("eyJyZWdEYXRlIjoxNzI5NTc5NzQyNTUzLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNCIsImlzcyI6ImNoZXJyeXN1bWVyIiwiZXhwIjoxNzMyMTcxNzQyfQ.lfFXCm_tcZE3hDI1c6UFfbUnZJjHp-2tCD6hqNd3x9Y")
 
         // AuthInterceptor에 this (Application context) 전달
         val authInterceptor = AuthInterceptor(this)
