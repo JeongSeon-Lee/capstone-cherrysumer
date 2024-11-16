@@ -55,7 +55,7 @@ class InventoryListFragment : Fragment() {
         setupFiltersVisibility()
         setupHelpButton(binding.helpButton)
 
-        fetchInventoryItems { isSuccess ->
+        getInventoryItems { isSuccess ->
             setupFilters()
             setupSwipeController()
         }
@@ -89,7 +89,7 @@ class InventoryListFragment : Fragment() {
         }
     }
 
-    private fun fetchInventoryItems(callback: (Boolean) -> Unit = { false }) {
+    private fun getInventoryItems(callback: (Boolean) -> Unit = { false }) {
         val stockLocations = resources.getStringArray(R.array.stock_location_array)
         if (stockLocation in stockLocations) {
             ApiManager().listInventoryItems(stockLocation ?: getString(R.string.fridge), object : ApiCallback<List<InventoryItem>> {
@@ -131,46 +131,70 @@ class InventoryListFragment : Fragment() {
     private fun setupFilters() {
         val currentItems = (binding.recyclerView.adapter as InventoryAdapter).getCurrentItems()
 
+        // 초기 선택값 저장
+        var selectedCategory = "카테고리"
+        var selectedSort = "정렬 기준"
+        var selectedStockLocation = "저장 위치"
+
+        // 필터링을 수행하는 함수
+        fun applyFilters() {
+            var filteredItems = currentItems
+
+            // 카테고리 필터
+            if (selectedCategory != "카테고리") {
+                filteredItems = filteredItems.filter { it.category == selectedCategory }
+            }
+
+            // 저장 위치 필터
+            if (selectedStockLocation != "저장 위치") {
+                filteredItems = filteredItems.filter { it.stockLocation == selectedStockLocation }
+            }
+
+            // 정렬 기준 필터
+            filteredItems = when (selectedSort) {
+                "최신 등록 순" -> filteredItems.sortedByDescending { it.createdAt }
+                "만료 임박 순" -> filteredItems.sortedBy { it.expirationDate }
+                "만료 여유 순" -> filteredItems.sortedByDescending { it.expirationDate }
+                "재고 많은 순" -> filteredItems.sortedByDescending { it.quantity }
+                "재고 적은 순" -> filteredItems.sortedBy { it.quantity }
+                else -> filteredItems
+            }
+
+            // 어댑터에 필터된 데이터 적용
+            binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+        }
+
+        // 카테고리 필터 설정
         binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedCategory = binding.categorySpinner.selectedItem.toString()
-                val filteredItems =
-                    if (selectedCategory == "카테고리") currentItems
-                    else currentItems.filter { it.category == selectedCategory }
-                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+                selectedCategory = binding.categorySpinner.selectedItem.toString()
+                applyFilters() // 필터 적용
             }
+
             override fun onNothingSelected(parent: AdapterView<*>) { }
         }
 
+        // 정렬 기준 필터 설정
         binding.sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedSort = binding.sortSpinner.selectedItem.toString()
-                val filteredItems = when (selectedSort) {
-                    "최신 등록 순" -> currentItems.sortedByDescending { it.createdAt }
-                    "만료 임박 순" -> currentItems.sortedBy { it.expirationDate }
-                    "만료 여유 순" -> currentItems.sortedByDescending { it.expirationDate }
-                    "재고 많은 순" -> currentItems.sortedByDescending { it.quantity }
-                    "재고 적은 순" -> currentItems.sortedBy { it.quantity }
-                    else -> currentItems
-                }
-                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+                selectedSort = binding.sortSpinner.selectedItem.toString()
+                applyFilters() // 필터 적용
             }
+
             override fun onNothingSelected(parent: AdapterView<*>) { }
         }
 
+        // 저장 위치 필터 설정
         binding.stockLocationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedStockLocation = binding.stockLocationSpinner.selectedItem.toString()
-                val stockLocations = resources.getStringArray(R.array.stock_location_array)
-                val filteredItems =
-                    if (selectedStockLocation in stockLocations)
-                        currentItems.filter { it.stockLocation == selectedStockLocation }
-                    else currentItems
-                binding.recyclerView.adapter = InventoryAdapter(filteredItems)
+                selectedStockLocation = binding.stockLocationSpinner.selectedItem.toString()
+                applyFilters() // 필터 적용
             }
+
             override fun onNothingSelected(parent: AdapterView<*>) { }
         }
     }
+
 
     private fun setupSwipeController() {
         val swipeController = SwipeController()

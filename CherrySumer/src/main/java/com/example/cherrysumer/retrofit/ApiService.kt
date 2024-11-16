@@ -3,10 +3,13 @@ package com.example.cherrysumer.retrofit
 import com.example.cherrysumer.retrofit.models.InventoryItem
 import com.example.cherrysumer.retrofit.models.ApiResponse
 import com.example.cherrysumer.retrofit.models.PostItem
+import com.example.cherrysumer.retrofit.models.RecentSearchItem
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -32,5 +35,11 @@ interface ApiService {
 
     @GET("mypage/applications/{filter}")
     fun listPostItems(@Path("filter") filter: String): Call<ApiResponse<List<PostItem>>>
+
+    @GET("api/search-log/recent")
+    fun getRecentSearchLogs(): Call<ApiResponse<List<RecentSearchItem>>>
+
+    @HTTP(method = "DELETE", path = "api/search-log/delete", hasBody = true)
+    fun deleteRecentSearchLog(@Body request: JsonObject): Call<ApiResponse<Unit>>
 
 }

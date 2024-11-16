@@ -50,7 +50,7 @@ class PostListFragment : Fragment() {
                             title = "Fresh Apples for Sale",
                             productName = "Apple",
                             purchaseDate = "2024-10-29",
-                            category = listOf("과일", "채소"),
+                            category = "과일",
                             applicantCount = 5,
                             purchaseCompleted = false,
                             inventoryRegistered = false
@@ -61,7 +61,7 @@ class PostListFragment : Fragment() {
                             title = "Organic Milk for Sale",
                             productName = "Milk",
                             purchaseDate = "2024-10-30",
-                            category = listOf("유제품"),
+                            category = "유제품",
                             applicantCount = 10,
                             purchaseCompleted = true,
                             inventoryRegistered = true
@@ -76,7 +76,7 @@ class PostListFragment : Fragment() {
                             putLong("postId", postItem.postId)
                             putString("productName", postItem.productName)
                             putString("purchaseDate", postItem.purchaseDate)
-                            putStringArrayList("category", ArrayList(postItem.category))
+                            putString("category", postItem.category)
                         }
                     }
                     requireActivity().supportFragmentManager.beginTransaction()

@@ -44,12 +44,13 @@ class InventoryAdapter(
         }
         val currentDate = LocalDate.now()
         val daysLeft = expirationDate.toEpochDay() - currentDate.toEpochDay() // LocalDate로 변환 후 사용
+        val firstCategory = model.category?.split(",")?.firstOrNull()?.trim()
 
         binding.itemProductName.text = model.productName
         binding.itemExpirationDate.text = "~${expirationDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))}"
         binding.itemCategory.text = model.category ?: ""
         binding.itemQuantity.text = "${model.quantity}"
-        binding.itemIcon.setImageResource(when (model.category) {
+        binding.itemIcon.setImageResource(when (firstCategory) {
             "과일" -> R.drawable.ic_fruit
             "채소" -> R.drawable.ic_cherry   // 이미지 바꿔야 함
             "유제품" -> R.drawable.ic_cherry  // 이미지 바꿔야 함
@@ -67,7 +68,7 @@ class InventoryAdapter(
             daysLeft == 0L -> "D-DAY"
             else -> "D+${-daysLeft}"
         }
-        if (daysLeft <= 0) {
+        if (daysLeft <= 3) {
             binding.itemDday.setBackgroundColor(Color.parseColor("#FF8B8B"))
         }
         if (model.quantity <= 1) {

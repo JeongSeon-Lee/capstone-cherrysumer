@@ -8,7 +8,7 @@ data class PostItem(
     @SerializedName("title") val title: String,
     @SerializedName("productName") val productName: String,
     @SerializedName("date") val purchaseDate: String,
-    @SerializedName("category") val category: List<String>,
+    @SerializedName("category") val category: String,
     @SerializedName("applicantCount") val applicantCount: Int,
     @SerializedName("purchaseCompleted") val purchaseCompleted: Boolean,
     @SerializedName("inventoryRegistered") val inventoryRegistered: Boolean,

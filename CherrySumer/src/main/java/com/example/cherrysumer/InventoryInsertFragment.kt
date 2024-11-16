@@ -23,7 +23,6 @@ import com.example.cherrysumer.retrofit.models.InventoryItem
 import com.google.android.material.chip.Chip
 import retrofit2.Response
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -89,7 +88,7 @@ class InventoryInsertFragment : Fragment() {
     }
 
     private fun setupCategoryChips() {
-        binding.categoryChipGroup.isSingleSelection = false
+        binding.categoryChipGroup.isSingleSelection = true
         val categories = resources.getStringArray(R.array.category_array)
         for (category in categories.drop(1)) {
             val chip = Chip(context)
@@ -105,25 +104,16 @@ class InventoryInsertFragment : Fragment() {
         val expirationDate = arguments?.getString("expirationDate")
         val quantity = arguments?.getInt("quantity")
         val stockLocation = arguments?.getString("stockLocation")
-        val category = arguments?.let {
-            val categoryArg = it.get("category")
-            when (categoryArg) {
-                is String -> categoryArg
-                is ArrayList<*> -> categoryArg.joinToString(", ") { item -> item.toString() }
-                else -> null
-            }
-        }
+        val category = arguments?.getString("category")
 
         binding.productNameInput.setText(productName)
         binding.purchaseDateInput.setText(purchaseDate?.substringBefore("T"))
         binding.expirationDateInput.setText(expirationDate?.substringBefore("T"))
         quantity?.let { binding.quantityPicker.value = it }
         category?.let {
-            val categories = it.split(", ").map { it.trim() }
             binding.categoryChipGroup.children.forEach { chip ->
-                if (chip is Chip && categories.contains(chip.text.toString())) {
+                if (chip is Chip && chip.text.toString() == it) {
                     chip.isChecked = true
-                    Log.d("InventoryInsertFragment", "Category chip checked: ${chip.text}")
                 }
             }
         }
@@ -148,12 +138,13 @@ class InventoryInsertFragment : Fragment() {
         }
     }
 
-    private fun getSelectedCategories(): String {
-        return binding.categoryChipGroup
-            .children
-            .filterIsInstance<Chip>()
-            .filter { it.isChecked }
-            .joinToString(", ") { it.text.toString() }
+    private fun getSelectedCategory(): String {
+        val selectedChipId = binding.categoryChipGroup.checkedChipId
+        return if (selectedChipId != View.NO_ID) {
+            binding.categoryChipGroup.findViewById<Chip>(selectedChipId)?.text?.toString() ?: ""
+        } else {
+            ""
+        }
     }
 
     private fun getSelectedStockLocation(): String {
@@ -167,11 +158,10 @@ class InventoryInsertFragment : Fragment() {
 
     private fun isValidInput(
         productName: String,
-        expirationDate: String,
         stockLocation: String,
         category: String
     ): Boolean {
-        return productName.isNotEmpty() && expirationDate != null && stockLocation.isNotEmpty() && category.isNotEmpty()
+        return productName.isNotEmpty() && stockLocation.isNotEmpty() && category.isNotEmpty()
     }
 
     private fun navigateToInventory(stockLocation: String) {
@@ -204,9 +194,9 @@ class InventoryInsertFragment : Fragment() {
         val expirationDate = parseDate(binding.expirationDateInput.text.toString())
         val quantity = binding.quantityPicker.value
         val stockLocation = getSelectedStockLocation()
-        val category = getSelectedCategories()
+        val category = getSelectedCategory()
 
-        if (isValidInput(productName, expirationDate, stockLocation, category)) {
+        if (isValidInput(productName, stockLocation, category)) {
             val inventoryItem = InventoryItem(
                 createdAt = "", updatedAt = "", id = 0,
                 productName = productName, purchaseDate = purchaseDate, expirationDate = expirationDate,
@@ -271,10 +261,12 @@ class InventoryInsertFragment : Fragment() {
                 ApiManager().registerPostItem(postId, object : ApiCallback<Unit> {
                     override fun onError(response: Response<ApiResponse<Unit>>) {
                         Log.e("InventoryInsertFragment", "공구에서 가져온 재고는 추가하였으나 재고 등록 완료에는 실패했습니다.")
+                        super.onError(response)
                     }
 
                     override fun onFailure(throwable: Throwable) {
                         Log.e("InventoryInsertFragment", "공구에서 가져온 재고는 추가하였으나 재고 등록 완료에는 실패했습니다.")
+                        super.onFailure(throwable)
                     }
                 })
             } ?: Log.e("RegisterPostItem", "postId is null")

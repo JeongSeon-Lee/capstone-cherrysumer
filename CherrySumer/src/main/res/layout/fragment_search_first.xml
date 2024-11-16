@@ -60,5 +60,14 @@
         android:layout_marginTop="16dp"
         android:text="최근 검색어"
         android:textSize="16sp" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/recent_search_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:chipSpacing="8dp"
+        app:singleLine="true" />
+
     </LinearLayout>
 </LinearLayout>
