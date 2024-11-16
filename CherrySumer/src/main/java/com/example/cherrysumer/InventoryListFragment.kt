@@ -50,7 +50,10 @@ class InventoryListFragment : Fragment() {
         binding = FragmentInventoryListBinding.inflate(inflater, container, false)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        binding.recyclerView.adapter = InventoryAdapter(emptyList())
+//        binding.recyclerView.adapter = InventoryAdapter(emptyList())
+        binding.recyclerView.adapter = InventoryAdapter(emptyList()) { itemId, updatedItem, position ->
+            updateItemQuantity(itemId, updatedItem, position)
+        }
 
         setupFiltersVisibility()
         setupHelpButton(binding.helpButton)
@@ -95,7 +98,9 @@ class InventoryListFragment : Fragment() {
             ApiManager().listInventoryItems(stockLocation ?: getString(R.string.fridge), object : ApiCallback<List<InventoryItem>> {
                 override fun onSuccess(apiResponse: ApiResponse<List<InventoryItem>>?) {
                     val inventoryItems = apiResponse?.data?.sortedByDescending { it.createdAt } ?: emptyList()
-                    binding.recyclerView.adapter = InventoryAdapter(inventoryItems)
+                    //binding.recyclerView.adapter = InventoryAdapter(inventoryItems)
+                    val adapter = binding.recyclerView.adapter as InventoryAdapter
+                    adapter.updateItemQuantity(inventoryItems)
                     super.onSuccess(apiResponse)
                     callback(true)
                 }
@@ -112,7 +117,9 @@ class InventoryListFragment : Fragment() {
             ApiManager().searchInventoryItems(searchQuery ?: "", object : ApiCallback<List<InventoryItem>> {
                 override fun onSuccess(apiResponse: ApiResponse<List<InventoryItem>>?) {
                     val inventoryItems = apiResponse?.data?.filter {it.productName?.contains(searchQuery ?: "", ignoreCase = true) == true }?.sortedByDescending { it.createdAt } ?: emptyList()
-                    binding.recyclerView.adapter = InventoryAdapter(inventoryItems)
+                    //binding.recyclerView.adapter = InventoryAdapter(inventoryItems)
+                    val adapter = binding.recyclerView.adapter as InventoryAdapter
+                    adapter.updateItemQuantity(inventoryItems)
                     super.onSuccess(apiResponse)
                     callback(true)
                 }
@@ -257,6 +264,44 @@ class InventoryListFragment : Fragment() {
             override fun onFailure(throwable: Throwable) {
                 Toast.makeText(activity, "네트워크 오류: ${throwable.message}", Toast.LENGTH_SHORT).show()
                 super.onFailure(throwable)
+            }
+        })
+    }
+
+    private fun updateItemQuantity(itemId: Int, updatedItem: InventoryItem, position: Int) {
+        Log.d("InventoryListFragment", "updateItemQuantity called. ID: $itemId, Position: $position")
+        Log.d("InventoryListFragment", "Updated item data: $updatedItem")
+
+        ApiManager().editInventoryItem(itemId, updatedItem, object : ApiCallback<Unit> {
+            override fun onSuccess(apiResponse: ApiResponse<Unit>?) {
+                Log.d("InventoryListFragment", "API success for item ID: $itemId")
+
+                val currentItems = (binding.recyclerView.adapter as InventoryAdapter).getCurrentItems().toMutableList()
+                Log.d("InventoryListFragment", "Current items before update: ${currentItems.map { it.id }}")
+
+                currentItems[position] = updatedItem
+                Log.d("InventoryListFragment", "Updated items: ${currentItems.map { it.id }}")
+
+                (binding.recyclerView.adapter as InventoryAdapter).updateItemQuantity(currentItems, position)
+                Log.d("InventoryListFragment", "Adapter notified successfully")
+
+                // 강제로 RecyclerView 다시 그리기
+                binding.recyclerView.post {
+                    binding.recyclerView.adapter?.notifyItemChanged(position)
+                    Log.d("InventoryListFragment", "RecyclerView item updated at position: $position")
+                }
+
+                Toast.makeText(activity, "수량이 업데이트되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onError(response: Response<ApiResponse<Unit>>) {
+                Log.e("InventoryListFragment", "API error: HTTP ${response.code()}")
+                Toast.makeText(activity, "수정에 실패했습니다 (HTTP ${response.code()})", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(throwable: Throwable) {
+                Log.e("InventoryListFragment", "Network failure: ${throwable.message}")
+                Toast.makeText(activity, "네트워크 오류: ${throwable.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -18,7 +18,8 @@ import java.time.LocalDateTime
 class InventoryViewHolder(val binding: ItemInventoryBinding): RecyclerView.ViewHolder(binding.root)
 
 class InventoryAdapter(
-    private val inventoryItems: List<InventoryItem>,
+    private var inventoryItems: List<InventoryItem>,
+    private var onUpdateItemQuantity: ((Int, InventoryItem, Int) -> Unit)? = null
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun getItemCount(): Int{
@@ -74,6 +75,37 @@ class InventoryAdapter(
         if (model.quantity <= 1) {
             binding.itemQuantity.setBackgroundColor(Color.parseColor("#FF8B8B"))
         }
+        binding.itemPlus.setOnClickListener {
+            Log.d("InventoryAdapter", "Plus button clicked for item ID: ${model.id}, Position: $position")
+            val updatedItem = model.copy(quantity = model.quantity + 1)
+            Log.d("InventoryAdapter", "Updated item: $updatedItem")
+            Log.d("InventoryAdapter", "Calling onUpdateItemQuantity callback for Plus button")
+            onUpdateItemQuantity?.invoke(model.id, updatedItem, position)
+        }
+
+        binding.itemMinus.setOnClickListener {
+            Log.d("InventoryAdapter", "Minus button clicked for item ID: ${model.id}, Position: $position")
+            if (model.quantity > 0) {
+                val updatedItem = model.copy(quantity = model.quantity - 1)
+                Log.d("InventoryAdapter", "Updated item: $updatedItem")
+                Log.d("InventoryAdapter", "Calling onUpdateItemQuantity callback for Minus button")
+                onUpdateItemQuantity?.invoke(model.id, updatedItem, position)
+            }
+        }
+
+    }
+
+    fun updateItemQuantity(newItems: List<InventoryItem>, position: Int? = null) {
+        Log.d("InventoryAdapter", "Updating items. Current list size: ${inventoryItems.size}")
+        inventoryItems = newItems
+        if (position != null) {
+            Log.d("InventoryAdapter", "Notifying item changed at position: $position")
+            notifyItemChanged(position)
+        } else {
+            Log.d("InventoryAdapter", "Notifying dataset changed")
+            notifyDataSetChanged()
+        }
+        Log.d("InventoryAdapter", "Updated list size: ${inventoryItems.size}")
     }
 
     fun getCurrentItems(): List<InventoryItem> {
