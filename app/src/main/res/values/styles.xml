@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TabTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemBackground">@android:color/transparent</item> <!-- 선택 배경 제거 -->
+        <item name="itemRippleColor">@null</item> <!-- Ripple 효과 제거 -->
+        <item name="itemIconTint">@color/black</item> <!-- 아이콘 색 고정 -->
+        <item name="itemTextColor">@color/black</item> <!-- 텍스트 색 고정 -->
+        <item name="itemPaddingTop">6dp</item>
+        <item name="itemPaddingBottom">6dp</item>
+    </style>
+
+    <style name="RoundButtonStyle" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialComponents.FloatingActionButton</item>
+    </style>
+
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/popup_menu_background</item> <!-- 배경 설정 -->
+        <item name="android:dropDownHorizontalOffset">8dp</item> <!-- 좌우 여백 -->
+        <item name="android:dropDownVerticalOffset">8dp</item> <!-- 상하 여백 -->
+    </style>
+
+    <style name="RoundedCorners" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+</resources>

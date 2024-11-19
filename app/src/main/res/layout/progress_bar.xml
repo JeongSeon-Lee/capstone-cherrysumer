@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="5dp"
+    android:orientation="horizontal"
+    android:background="#D9D9D9"
+    android:id="@+id/progress_bar">
+
+    <View
+        android:id="@+id/progress_1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#D9D9D9" />
+
+    <View
+        android:id="@+id/progress_2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#D9D9D9" />
+
+    <View
+        android:id="@+id/progress_3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#D9D9D9" />
+
+    <View
+        android:id="@+id/progress_4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#D9D9D9" />
+
+    <View
+        android:id="@+id/progress_5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#D9D9D9" />
+
+</LinearLayout>

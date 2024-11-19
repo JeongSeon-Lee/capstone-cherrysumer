@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.cookandroid.cherrysumer">
+
+    <!-- 필수 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CherrySumer"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:name=".retrofit.MyApplication">
+
+        <!-- 네이버 지도 API 키 -->
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="qx38h3se2w" />
+
+        <!-- 스플래시 액티비티 -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 기타 액티비티 -->
+        <activity
+            android:name=".onboarding.OnboardingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".join.Signup1Activity"
+            android:exported="false" />
+        <activity
+            android:name=".join.Signup2Activity"
+            android:exported="false" />
+        <activity
+            android:name=".join.Signup3Activity"
+            android:exported="false" />
+        <activity
+            android:name=".join.Signup4Activity"
+            android:exported="false" />
+        <activity
+            android:name=".join.Signup5Activity"
+            android:exported="false" />
+        <activity
+            android:name=".join.Signup6Activity"
+            android:exported="false" />
+        <activity
+            android:name=".FindID.FindIdActivity1"
+            android:exported="false" />
+        <activity
+            android:name=".FindID.FindIdActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".FindPW.FindPasswordActivity1"
+            android:exported="false" />
+        <activity
+            android:name=".FindPW.FindPasswordActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".FindPW.FindPasswordActivity3"
+            android:exported="false" />
+        <activity
+            android:name=".FindPW.FindPasswordActivity4"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.NoticeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.LikeListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.PostManageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.StatusActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.ApplicantListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mypage.ProfileViewActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

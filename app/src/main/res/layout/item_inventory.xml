@@ -1,0 +1,122 @@
+<LinearLayout
+    android:id="@+id/item_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginBottom="8dp"
+    android:paddingBottom="10dp"
+    android:background="@color/white">
+
+    <!-- D-Day 배지 -->
+    <TextView
+        android:id="@+id/item_dday"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:background="@color/light_gray"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp"
+        android:textSize="12sp"
+        android:text="D-356" />
+
+    <!-- 아이템 내용 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="8dp">
+
+        <!-- 아이템 아이콘 -->
+        <ImageView
+            android:id="@+id/item_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="4dp"
+            android:paddingBottom="8dp"
+            android:layout_margin="10dp"/>
+
+        <!-- 아이템 정보 레이아웃 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp" >
+
+            <!-- 아이템 이름과 카테고리 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/item_productName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="우유" />
+                <TextView
+                    android:id="@+id/item_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp"
+                    android:text="유제품" />
+            </LinearLayout>
+
+            <!-- 아이템 기한 -->
+            <TextView
+                android:id="@+id/item_expirationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:text="24.07.10 ~ 24.07.20" />
+        </LinearLayout>
+
+        <!-- 수량 및 버튼 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="14dp">
+
+            <!-- 플러스 버튼 -->
+            <ImageButton
+                android:id="@+id/btn_plus"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/rounded_button_background"
+                android:src="@drawable/ic_plus"
+                android:contentDescription="Plus Button" />
+
+            <!-- 수량 표시 -->
+            <TextView
+                android:id="@+id/item_quantity"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:gravity="center"
+                android:text="100"
+                android:textSize="18sp"
+                android:textColor="@android:color/black" />
+
+            <!-- 마이너스 버튼 -->
+            <ImageButton
+                android:id="@+id/btn_minus"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/rounded_button_background"
+                android:src="@drawable/ic_minus"
+                android:contentDescription="Minus Button" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

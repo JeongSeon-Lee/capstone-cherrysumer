@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 타이틀 텍스트 -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="230dp"
+        android:fontFamily="@font/notosans_kr_medium"
+        android:textSize="18sp"
+        android:includeFontPadding="false"
+        android:text="회원가입 완료"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 설명 텍스트 -->
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="4dp"
+        android:fontFamily="@font/notosans_kr_regular"
+        android:textSize="16sp"
+        android:includeFontPadding="false"
+        android:text="필요한 물품을 같이 구매하러 가볼까요?"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+    <android.widget.Button
+        android:id="@+id/start_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="138dp"
+        android:background="@drawable/button_black_color"
+        android:fontFamily="@font/notosans_kr_medium"
+        android:includeFontPadding="false"
+        android:paddingVertical="17dp"
+        android:text="완료"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

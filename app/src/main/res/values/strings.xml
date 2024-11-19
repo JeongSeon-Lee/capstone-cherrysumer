@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">CherrySumer</string>
+    <string name="splash_logo_desc">CherrySumer logo</string>
+
+    <!-- 카테고리 선택 배열 -->
+    <string-array name="category_array">
+        <item>@string/category</item>
+        <item>@string/fruits</item>
+        <item>@string/vegetables</item>
+        <item>@string/dairy</item>
+        <item>@string/meat</item>
+        <item>@string/frozen_food</item>
+        <item>@string/seafood</item>
+        <item>@string/beverages</item>
+        <item>@string/convenience_food</item>
+        <item>@string/desserts</item>
+        <item>@string/household_goods</item>
+    </string-array>
+
+    <string name="category">카테고리</string>
+    <string name="fruits">과일</string>
+    <string name="vegetables">채소</string>
+    <string name="dairy">유제품</string>
+    <string name="meat">정육</string>
+    <string name="frozen_food">냉동식품</string>
+    <string name="seafood">수산물</string>
+    <string name="beverages">음료</string>
+    <string name="convenience_food">간편식</string>
+    <string name="desserts">디저트</string>
+    <string name="household_goods">생활용품</string>
+
+    <!-- 정렬 기준 배열 -->
+    <string-array name="sort_array">
+        <item>최신 등록 순</item>
+        <item>만료 임박 순</item>
+        <item>만료 여유 순</item>
+        <item>재고 많은 순</item>
+        <item>재고 적은 순</item>
+    </string-array>
+    가져오기
+    <string-array name="stock_location_array">
+        <item>냉장실</item>
+        <item>냉동실</item>
+        <item>실외 저장소</item>
+    </string-array>
+
+    <string name="fridge">냉장실</string>
+    <string name="freezer">냉동실</string>
+    <string name="outdoor_storage">실외 저장소</string>
+
+</resources>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mypage_notice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.9">
+
+        <!-- 이전 버튼 -->
+        <ImageButton
+            android:id="@+id/previous_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="centerInside"
+            android:background="@android:color/transparent"
+            android:src="@drawable/left_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/profile_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="@font/notosans_kr_medium"
+            android:includeFontPadding="false"
+            android:text="참여 신청자 목록"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/under_line1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="18dp"
+        android:background="#EBEBEB"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mypage_notice"/>
+    
+    <LinearLayout
+        android:id="@+id/option_buttons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintTop_toBottomOf="@id/under_line1">
+        
+        <TextView
+            android:id="@+id/all_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="8dp"
+            android:fontFamily="@font/notosans_kr_medium"
+            android:includeFontPadding="false"
+            android:text="전체"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:background="@drawable/option_selected_button" />
+
+        <TextView
+            android:id="@+id/approval_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/post_category_select_button"
+            android:fontFamily="@font/notosans_kr_medium"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="8dp"
+            android:text="승인"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/refuse_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="8dp"
+            android:fontFamily="@font/notosans_kr_medium"
+            android:includeFontPadding="false"
+            android:text="거절"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:background="@drawable/post_category_select_button" />
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/empty_view"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="20dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/option_buttons"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.9">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

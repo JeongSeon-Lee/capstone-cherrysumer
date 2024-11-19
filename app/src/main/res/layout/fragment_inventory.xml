@@ -1,0 +1,68 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 상단의 툴바와 탭 레이아웃을 감싸는 LinearLayout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 툴바 -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            android:elevation="4dp">
+
+            <!-- 중앙 정렬 타이틀 -->
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="나의 재고"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <!-- 탭바 -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="1dp"
+            app:tabIndicatorColor="@color/red"
+            app:tabIndicatorHeight="4dp"
+            app:tabIndicatorFullWidth="true"
+            app:tabTextColor="@color/light_gray"
+            app:tabSelectedTextColor="@color/red"
+            app:tabMode="fixed"
+            app:tabTextAppearance="@style/TabTextStyle" />
+
+        <FrameLayout
+            android:id="@+id/tab_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- 플로팅 액션 버튼 (FAB), 상단에 위치하게 됨 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/inventory_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        style="@style/RoundButtonStyle"
+        android:backgroundTint="@color/red"
+        app:srcCompat="@drawable/ic_write"
+        android:elevation="6dp" />
+
+</FrameLayout>

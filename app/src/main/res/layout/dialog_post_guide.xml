@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_post_guide_background">
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="참여하기 : 게시글 일정에 참여 신청을 할 수 있습니다. 버튼을 누르실 경우 작성자에게 회원님의 정보가 보여지며, 신청은 취소할 수 없습니다. " />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="메시지 : 게시글 작성자와 채팅을 할 수 있습니다. 신청 취소, 일정 조정 등이 필요할 때 사용해 보세요." />
+
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="찜 : 하트를 누르면 관심 게시글에 추가됩니다. 찜한 게시글은 마이페이지에서 확인 가능합니다." />
+
+        <TextView
+            android:id="@+id/text4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="참여신청 승인 여부는 마이페이지에서 확인 가능합니다." />
+
+        <TextView
+            android:id="@+id/text5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="작성자에게 제공되는 신청자 정보 : 닉네임, 거주지" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
