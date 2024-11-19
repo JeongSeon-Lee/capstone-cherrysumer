@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingVertical="16dp"
+    android:paddingHorizontal="25dp"
+    android:background="@drawable/bottom_sheet_style"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+    <LinearLayout
+        android:layout_width="40dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="8dp"
+        android:text="카테고리 선택"
+        android:fontFamily="@font/notosans_kr_bold"
+        android:textSize="20sp"
+        android:includeFontPadding="false"
+        android:textStyle="bold"
+        android:paddingBottom="12dp"
+        android:textColor="#000000"/>
+
+    <View
+        android:id="@+id/under_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:background="#F0F0F0"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="5dp">
+
+            <!-- 전체 -->
+            <LinearLayout
+                android:id="@+id/all_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/all_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_medium"
+                    android:includeFontPadding="false"
+                    android:text="전체"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_all"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="visible"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 과일 -->
+            <LinearLayout
+                android:id="@+id/fruit_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/fruit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="과일"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_fruit"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 채소 -->
+            <LinearLayout
+                android:id="@+id/vegetable_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/vegetable_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="채소"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_vegetable"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+
+            <!-- 배달 -->
+            <LinearLayout
+                android:id="@+id/delivery_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/delivery_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="배달"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_delivery"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 정육 -->
+            <LinearLayout
+                android:id="@+id/meat_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/meat_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="정육"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_meat"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 냉동식품 -->
+            <LinearLayout
+                android:id="@+id/frozen_food_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/frozen_food_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="냉동식품"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_frozen_food"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 수산물 -->
+            <LinearLayout
+                android:id="@+id/marine_products_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/marine_products_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="수산물"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_marine_products"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 음료 -->
+            <LinearLayout
+                android:id="@+id/drink_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/drink_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="음료"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_drink"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 유제품 -->
+            <LinearLayout
+                android:id="@+id/dairy_products_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/dairy_products_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="유제품"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_dairy_products"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 간편식 -->
+            <LinearLayout
+                android:id="@+id/convenient_food_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/convenient_food_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="간편식"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_convenient_food"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 디저트 -->
+            <LinearLayout
+                android:id="@+id/dessert_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/dessert_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="디저트"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_dessert"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+
+            <!-- 생활용품 -->
+            <LinearLayout
+                android:id="@+id/daily_supplies_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/daily_supplies_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:includeFontPadding="false"
+                    android:text="생활용품"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+                <ImageView
+                    android:id="@+id/check_daily_supplies"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

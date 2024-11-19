@@ -1,0 +1,4 @@
+package com.cookandroid.cherrysumer.mypage
+
+class ByeActivity {
+}

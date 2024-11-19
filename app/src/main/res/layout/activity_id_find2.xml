@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/previous_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="20dp"
+        android:scaleType="centerInside"
+        android:background="@android:color/transparent"
+        android:src="@drawable/left_arrow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:fontFamily="@font/notosans_kr_medium"
+        android:textSize="18sp"
+        android:includeFontPadding="false"
+        android:text="아이디 찾기"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/description_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:paddingLeft="4dp"
+        android:fontFamily="@font/notosans_kr_regular"
+        android:textSize="16sp"
+        android:includeFontPadding="false"
+        android:text="회원님의 아이디는"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="@id/user_id"/>
+
+    <TextView
+        android:id="@+id/user_id"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:background="@drawable/edit_text_style"
+        android:fontFamily="@font/notosans_kr_regular"
+        android:textSize="16sp"
+        android:includeFontPadding="false"
+        android:text="cherrySumer1234"
+        app:layout_constraintTop_toBottomOf="@id/description_start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.8"/>
+
+    <TextView
+        android:id="@+id/description_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="4dp"
+        android:fontFamily="@font/notosans_kr_regular"
+        android:textSize="16sp"
+        android:includeFontPadding="false"
+        android:text="입니다."
+        app:layout_constraintTop_toBottomOf="@id/user_id"
+        app:layout_constraintStart_toStartOf="@id/user_id"/>
+
+    <android.widget.Button
+        android:id="@+id/login_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="138dp"
+        android:paddingVertical="17dp"
+        android:background="@drawable/button_none_color"
+        android:fontFamily="@font/notosans_kr_medium"
+        android:textSize="18sp"
+        android:textColor="#FF5959"
+        android:includeFontPadding="false"
+        android:text="로그인 하러 가기"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.8"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

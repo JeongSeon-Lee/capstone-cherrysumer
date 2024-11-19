@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:orientation="horizontal"
+    android:paddingHorizontal="5dp"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/post_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/circle_profile"
+        android:src="@drawable/profile"
+        android:clipToOutline="true" />
+
+    <LinearLayout
+        android:id="@+id/post_description"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginStart="15dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/user_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:textSize="16sp"
+                    android:includeFontPadding="false"
+                    android:text="1"
+                    android:visibility="gone"
+                    android:textColor="#000000"/>
+
+                <TextView
+                    android:id="@+id/user_nickname"
+                    android:layout_width="wrap_content"
+                    android:maxWidth="155dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_kr_medium"
+                    android:textSize="16sp"
+                    android:includeFontPadding="false"
+                    android:text="화장 마술사"
+                    android:textColor="#000000"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+
+                <TextView
+                    android:id="@+id/user_status_approve"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="3dp"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:textSize="12sp"
+                    android:includeFontPadding="false"
+                    android:text="승인"
+                    android:background="@drawable/option_selected_button"
+                    android:textColor="#FFFFFF"/>
+
+                <TextView
+                    android:id="@+id/user_status_refuse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="3dp"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:textSize="12sp"
+                    android:includeFontPadding="false"
+                    android:text="거절"
+                    android:background="@drawable/option_no_selected_button"
+                    android:textColor="#FFFFFF"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+
+                <TextView
+                    android:id="@+id/user_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:textSize="14sp"
+                    android:text="대연동"
+                    android:includeFontPadding="false"
+                    android:textColor="#6F6F6F"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_gravity="right">
+
+            <TextView
+                android:id="@+id/select_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:fontFamily="@font/notosans_kr_medium"
+                android:textSize="14sp"
+                android:includeFontPadding="false"
+                android:text="결정완료"
+                android:textColor="#A7A7A7"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/option_approve"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                android:fontFamily="@font/notosans_kr_medium"
+                android:textSize="14sp"
+                android:includeFontPadding="false"
+                android:text="승인"
+                android:textColor="@color/black"
+                android:background="@drawable/status_button"/>
+
+            <TextView
+                android:id="@+id/option_refuse"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:fontFamily="@font/notosans_kr_medium"
+                android:textSize="14sp"
+                android:includeFontPadding="false"
+                android:text="거절"
+                android:textColor="@color/black"
+                android:background="@drawable/status_button"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

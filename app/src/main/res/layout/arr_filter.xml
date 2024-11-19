@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingVertical="16dp"
+    android:paddingHorizontal="25dp"
+    android:background="@drawable/bottom_sheet_style"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+    <LinearLayout
+        android:layout_width="40dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="8dp"
+        android:text="정렬 방법 선택"
+        android:fontFamily="@font/notosans_kr_bold"
+        android:textSize="20sp"
+        android:includeFontPadding="false"
+        android:textStyle="bold"
+        android:paddingBottom="12dp"
+        android:textColor="#000000"/>
+
+    <View
+        android:id="@+id/under_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:background="#F0F0F0"/>
+
+    <!-- 최신순 -->
+    <LinearLayout
+        android:id="@+id/filter_latest_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="15dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/filter_latest_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/notosans_kr_medium"
+            android:includeFontPadding="false"
+            android:text="최신순"
+            android:textSize="17sp"
+            android:textColor="@color/cherry"/>
+
+        <ImageView
+            android:id="@+id/check_latest"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:visibility="visible"
+            android:src="@drawable/ic_check" />
+    </LinearLayout>
+
+    <!-- 추천순 -->
+    <LinearLayout
+        android:id="@+id/filter_recommended_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="15dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/filter_recommended_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:includeFontPadding="false"
+            android:text="추천순"
+            android:textSize="17sp"
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/check_recommended"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_check" />
+    </LinearLayout>
+
+    <!-- 인기순 -->
+    <LinearLayout
+        android:id="@+id/filter_popular_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="15dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/filter_popular_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:includeFontPadding="false"
+            android:text="인기순"
+            android:textSize="17sp"
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/check_popular"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_check" />
+    </LinearLayout>
+
+    <!-- 저가순 -->
+    <LinearLayout
+        android:id="@+id/filter_low_price_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="15dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/filter_low_price_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:includeFontPadding="false"
+            android:text="저가순"
+            android:textSize="17sp"
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/check_low_price"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_check" />
+    </LinearLayout>
+
+    <!-- 고가순 -->
+    <LinearLayout
+        android:id="@+id/filter_high_price_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="15dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/filter_high_price_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:includeFontPadding="false"
+            android:text="고가순"
+            android:textSize="17sp"
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/check_high_price"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_check" />
+    </LinearLayout>
+
+</LinearLayout>

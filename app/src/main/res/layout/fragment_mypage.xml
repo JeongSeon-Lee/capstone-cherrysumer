@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="20dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.9">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/mypage_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:paddingHorizontal="5dp"
+                android:gravity="center_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="15dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/circle_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_kr_bold"
+                    android:includeFontPadding="false"
+                    android:text="김아영"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <android.widget.Button
+                    android:id="@+id/profileButton"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/profile_button"
+                    android:fontFamily="@font/notosans_kr_medium"
+                    android:includeFontPadding="false"
+                    android:text="프로필 보기"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/under_line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="#EBEBEB"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mypage_profile"/>
+
+            <LinearLayout
+                android:id="@+id/mypage_manage"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_marginTop="5dp"
+                android:paddingHorizontal="5dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/under_line1">
+
+                <TextView
+                    android:id="@+id/like_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:paddingVertical="10dp"
+                    android:paddingLeft="2dp"
+                    android:includeFontPadding="false"
+                    android:text="관심목록"
+                    android:textColor="#000000"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/post_manage"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:paddingVertical="10dp"
+                    android:paddingLeft="2dp"
+                    android:includeFontPadding="false"
+                    android:text="게시글 관리"
+                    android:textColor="#000000"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:paddingVertical="10dp"
+                    android:paddingLeft="2dp"
+                    android:includeFontPadding="false"
+                    android:text="참여 / 모집 현황"
+                    android:textColor="#000000"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/under_line2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="#EBEBEB"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mypage_manage"/>
+
+            <LinearLayout
+                android:id="@+id/mypage_setting"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_marginTop="5dp"
+                android:paddingHorizontal="5dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/under_line2">
+
+                <TextView
+                    android:id="@+id/category_setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:paddingVertical="10dp"
+                    android:paddingLeft="2dp"
+                    android:includeFontPadding="false"
+                    android:text="카테고리 설정"
+                    android:textColor="#000000"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/myRegion_setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:paddingVertical="10dp"
+                    android:paddingLeft="2dp"
+                    android:includeFontPadding="false"
+                    android:text="내 동네 설정"
+                    android:textColor="#000000"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/notice"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:paddingVertical="10dp"
+                    android:paddingLeft="2dp"
+                    android:includeFontPadding="false"
+                    android:text="공지사항"
+                    android:textColor="#000000"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/under_line3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="#EBEBEB"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mypage_setting"/>
+
+            <LinearLayout
+                android:id="@+id/mypage_out"
+                android:layout_width="match_parent"
+                android:layout_height="115dp"
+                android:layout_marginTop="5dp"
+                android:paddingHorizontal="5dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/under_line3">
+
+                <TextView
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:paddingVertical="10dp"
+                    android:paddingLeft="2dp"
+                    android:includeFontPadding="false"
+                    android:text="로그아웃"
+                    android:textColor="#000000"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/bye"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/notosans_kr_regular"
+                    android:paddingVertical="10dp"
+                    android:paddingLeft="2dp"
+                    android:includeFontPadding="false"
+                    android:text="회원 탈퇴"
+                    android:textColor="#000000"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

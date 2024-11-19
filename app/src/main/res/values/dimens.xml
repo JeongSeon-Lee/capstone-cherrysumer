@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- other dimensions -->
+    <dimen name="selected_line_height">3dp</dimen>
+    <dimen name="default_line_height">1dp</dimen>
+</resources>
