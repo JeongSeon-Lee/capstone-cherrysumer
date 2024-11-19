@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <!-- 스피너 배경 -->
+        <shape>
+            <solid android:color="@color/white"/>
+            <corners android:radius="24dp" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/light_gray" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/ic_arrow_down"
+        android:gravity="end|center_vertical"
+        android:paddingEnd="4dp" >
+    </item>
+</layer-list>
+

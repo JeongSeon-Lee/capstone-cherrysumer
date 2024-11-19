@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/white"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:titleTextColor="#121212" />
@@ -19,19 +20,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_marginTop="52dp"
+        android:layout_marginHorizontal="48dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="무엇을 찾고 계신가요?"
-        android:textSize="18sp"
+        android:text="무엇을"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="찾고 계신가요?"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="48dp">
 
         <EditText
             android:id="@+id/search_query_first"
@@ -39,25 +48,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="검색어를 입력하세요"
-            android:inputType="text"
-            android:padding="10dp"
-            android:paddingEnd="10dp" />
+            android:inputType="text"/>
 
         <ImageButton
             android:id="@+id/search_button_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="검색"
-            android:padding="12dp"
-            android:src="@android:drawable/ic_menu_search" />
+            android:src="@drawable/ic_menu_search"
+            android:scaleType="centerInside"
+            android:padding="6dp" />
+
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
         android:text="최근 검색어"
         android:textSize="16sp" />
 
@@ -65,9 +74,9 @@
         android:id="@+id/recent_search_chip_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:chipSpacing="8dp"
-        app:singleLine="true" />
+        app:chipSpacingHorizontal="8dp"
+        app:chipSpacingVertical="-4dp"
+        app:singleLine="false" />
 
     </LinearLayout>
 </LinearLayout>

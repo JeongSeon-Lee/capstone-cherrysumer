@@ -2,6 +2,7 @@ package com.example.cherrysumer
 
 import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -10,6 +11,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +31,7 @@ class InventoryFragment : Fragment() {
         setHasOptionsMenu(true)
 
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
-        (activity as? AppCompatActivity)?.supportActionBar?.title = "나의 재고"
+        (activity as? AppCompatActivity)?.supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val stockLocation = arguments?.getString("stockLocation") ?: getString(R.string.fridge)
         if (savedInstanceState == null) {
@@ -62,30 +65,49 @@ class InventoryFragment : Fragment() {
         })
 
         binding.inventoryAdd.setOnClickListener {
-            val popupMenu = PopupMenu(requireContext(), it)
-            popupMenu.menuInflater.inflate(R.menu.inventory_insert_menu, popupMenu.menu)
+            val inflater = LayoutInflater.from(requireContext())
+            val popupView = inflater.inflate(R.layout.custom_popup_menu, null)
 
-            popupMenu.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.menu_direct_input -> {
-                        val transaction = activity?.supportFragmentManager?.beginTransaction()
-                        transaction?.replace(R.id.nav_content, InventoryInsertFragment())
-                        transaction?.addToBackStack(null)
-                        transaction?.commit()
-                        true
-                    }
-                    R.id.menu_import_purchase -> {
-                        val transaction = activity?.supportFragmentManager?.beginTransaction()
-                        transaction?.replace(R.id.nav_content, PostListFragment())
-                        transaction?.addToBackStack(null)
-                        transaction?.commit()
-                        true
-                    }
-                    else -> false
-                }
+            // PopupWindow 생성
+            val popupWindow = PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+            )
+            popupWindow.elevation = 8f
+
+            // 메뉴 클릭 이벤트
+            popupView.findViewById<TextView>(R.id.menu_direct_input).setOnClickListener {
+                popupWindow.dismiss()
+                // 직접 입력 페이지 이동
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                transaction?.replace(R.id.nav_content, InventoryInsertFragment())
+                transaction?.addToBackStack(null)
+                transaction?.commit()
             }
 
-            popupMenu.show()
+            popupView.findViewById<TextView>(R.id.menu_import_purchase).setOnClickListener {
+                popupWindow.dismiss()
+                // 게시글 가져오기 페이지 이동
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                transaction?.replace(R.id.nav_content, PostListFragment())
+                transaction?.addToBackStack(null)
+                transaction?.commit()
+            }
+
+            // 가로 크기 제한 (예: 200dp로 제한)
+            val density = resources.displayMetrics.density
+            popupWindow.width = (170 * density).toInt()
+
+            // 팝업 위치: 플로팅 버튼 바로 위
+            val location = IntArray(2)
+            binding.inventoryAdd.getLocationOnScreen(location)
+
+            val xOffset = binding.inventoryAdd.width / 2 - popupWindow.width / 2 - (64 * density).toInt()
+            val yOffset = -(binding.inventoryAdd.height + popupView.measuredHeight + (46 * density).toInt())
+
+            popupWindow.showAtLocation(binding.inventoryAdd, Gravity.NO_GRAVITY, location[0] + xOffset, location[1] + yOffset)
         }
 
         return binding.root

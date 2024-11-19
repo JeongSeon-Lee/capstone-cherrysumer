@@ -6,16 +6,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:titleTextColor="#121212" />
+        android:background="@color/white"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,12 +44,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="상품명"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
             <EditText
                 android:id="@+id/productNameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="상품명을 입력하세요" />
+                android:hint="상품명"
+                android:textSize="14sp"
+                android:background="@drawable/edittext_border" />
 
             <!-- 유통기한 -->
             <LinearLayout
@@ -51,7 +65,9 @@
                     android:layout_height="wrap_content"
                     android:text="유통기한"
                     android:textSize="16sp"
-                    android:layout_marginBottom="8dp" />
+                    android:textStyle="bold"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="4dp" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -64,12 +80,14 @@
                         android:clickable="true"
                         android:focusable="false"
                         android:hint="구매 날짜"
-                        android:padding="8dp" />
+                        android:textSize="14sp"
+                        android:background="@drawable/edittext_border"
+                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
-                        android:text="-"
+                        android:text="~"
                         android:textSize="16sp"
                         android:gravity="center" />
                     <EditText
@@ -80,49 +98,76 @@
                         android:clickable="true"
                         android:focusable="false"
                         android:hint="유통기한"
-                        android:padding="8dp" />
+                        android:textSize="14sp"
+                        android:background="@drawable/edittext_border"/>
                 </LinearLayout>
             </LinearLayout>
-
 
             <!-- 수량 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp"
                 android:text="수량"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:background="@drawable/edittext_border">
 
-                <NumberPicker
-                    android:id="@+id/quantityPicker"
-                    android:layout_width="0dp"
-                    android:layout_height="63dp"
-                    android:layout_weight="1"
-                    android:gravity="center" />
+                <!-- EditText -->
+                <EditText
+                    android:id="@+id/quantityInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/unitText"
+                    android:layout_toStartOf="@+id/unitText"
+                    android:layout_marginEnd="8dp"
+                    android:layout_centerVertical="true"
+                    android:hint="정수 단위로 입력하세요"
+                    android:inputType="number"
+                    android:focusable="false"
+                    android:background="@android:color/transparent"
+                    android:padding="0dp"
+                    android:textSize="14sp"
+                    android:gravity="start|center_vertical" />
 
+                <!-- 단위 텍스트 -->
                 <TextView
+                    android:id="@+id/unitText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:gravity="center_vertical"
-                    android:padding="4dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="28dp"
                     android:text="개"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
-            </LinearLayout>
+
+                <!-- 드롭다운 이미지 -->
+                <ImageView
+                    android:id="@+id/dropdownIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_dropdown" />
+            </RelativeLayout>
 
             <!-- 재고 위치 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp"
                 android:text="재고 위치"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/stockLocationChipGroup"
@@ -134,13 +179,25 @@
                     android:id="@+id/chip_fridge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:chipBackgroundColor="@color/white"
+                    android:textColor="@color/chip_selector"
+                    app:chipStrokeWidth="1dp"
+                    app:chipStrokeColor="@color/chip_selector"
+                    app:chipCornerRadius="24dp"
+                    app:rippleColor="@null"
                     android:checkable="true"
                     android:text="@string/fridge" />
-
+x`
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_freezer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:chipBackgroundColor="@color/white"
+                    android:textColor="@color/chip_selector"
+                    app:chipStrokeWidth="1dp"
+                    app:chipCornerRadius="24dp"
+                    app:chipStrokeColor="@color/chip_selector"
+                    app:rippleColor="@null"
                     android:checkable="true"
                     android:text="@string/freezer" />
 
@@ -148,6 +205,12 @@
                     android:id="@+id/chip_outdoor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:chipBackgroundColor="@color/white"
+                    android:textColor="@color/chip_selector"
+                    app:chipStrokeWidth="1dp"
+                    app:chipCornerRadius="24dp"
+                    app:chipStrokeColor="@color/chip_selector"
+                    app:rippleColor="@null"
                     android:checkable="true"
                     android:text="@string/outdoor_storage" />
             </com.google.android.material.chip.ChipGroup>
@@ -156,23 +219,163 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="카테고리"
                 android:textSize="16sp"
-                app:singleSelection="true" />
+                app:singleSelection="true"
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:text="기본 카테고리를 선택하세요."
                 android:textSize="16sp" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/categoryChipGroup"
-                android:layout_width="wrap_content"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:singleSelection="true" />
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/categoryChipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleLine="true"
+                    app:selectionRequired="false"
+                    app:singleSelection="true">
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_fruits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/fruits" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_vegetables"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/vegetables" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_dairy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/dairy" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_meat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/meat" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_frozen_food"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/frozen_food" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_seafood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/seafood" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_beverages"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/beverages" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_convenience_food"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/convenience_food" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_desserts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/desserts" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_household_goods"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/white"
+                        android:textColor="@color/chip_selector"
+                        app:chipStrokeWidth="1dp"
+                        app:chipCornerRadius="24dp"
+                        app:chipStrokeColor="@color/chip_selector"
+                        app:rippleColor="@null"
+                        android:checkable="true"
+                        android:text="@string/household_goods" />
+
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
             <!-- 추가하기 버튼 -->
             <Button
@@ -180,9 +383,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="#454545"
+                android:background="@drawable/insert_button_background"
+                android:gravity="center"
+                android:paddingVertical="12dp"
                 android:text="추가하기"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null"/>
 
         </LinearLayout>
 

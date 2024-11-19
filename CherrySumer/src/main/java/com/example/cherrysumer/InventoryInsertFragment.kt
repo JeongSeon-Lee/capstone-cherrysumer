@@ -1,17 +1,23 @@
 package com.example.cherrysumer
 
 import android.app.DatePickerDialog
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -21,6 +27,9 @@ import com.example.cherrysumer.retrofit.ApiManager
 import com.example.cherrysumer.retrofit.models.ApiResponse
 import com.example.cherrysumer.retrofit.models.InventoryItem
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.ShapeAppearanceModel
 import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -51,15 +60,28 @@ class InventoryInsertFragment : Fragment() {
         binding.addButton.text = if (source == "editInventoryItem") "수정하기" else "추가하기"
         setupDatePicker(binding.purchaseDateInput)
         setupDatePicker(binding.expirationDateInput)
-        setupNumberPicker(binding.quantityPicker)
-        setupCategoryChips()
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_number_picker, null)
+        val numberPicker = dialogView.findViewById<NumberPicker>(R.id.dialogNumberPicker)
+        setupNumberPicker(numberPicker)
     }
 
     private fun setupToolbar() {
-        (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar) // 액션바 설정
+        // Toolbar를 액션바로 설정
+        (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         val actionBar = (activity as? AppCompatActivity)?.supportActionBar
-        actionBar?.title = if (source == "editInventoryItem") "재고 수정" else "재고 추가"
+
+        // 액션바의 기본 타이틀 비활성화
+        actionBar?.setDisplayShowTitleEnabled(false)
+
+        // XML에서 정의한 TextView를 사용하여 타이틀 설정
+        binding.toolbarTitle.text = if (source == "editInventoryItem") "재고 수정" else "재고 추가"
+
+        // 업 버튼 활성화
         actionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            // 뒤로 가기 동작
+            activity?.onBackPressed()
+        }
     }
 
     private fun setupDatePicker(inputField: EditText) {
@@ -82,21 +104,60 @@ class InventoryInsertFragment : Fragment() {
     }
 
     private fun setupNumberPicker(numberPicker: NumberPicker, min: Int = 0, max: Int = 100) {
-        numberPicker.minValue = min
-        numberPicker.maxValue = max
-        numberPicker.wrapSelectorWheel = true
+        binding.quantityInput.setOnClickListener {
+            // 다이얼로그 레이아웃 Inflate
+            val dialogView = layoutInflater.inflate(R.layout.dialog_number_picker, null)
+
+            // NumberPicker 초기화
+            val numberPicker = dialogView.findViewById<NumberPicker>(R.id.dialogNumberPicker)
+            numberPicker.minValue = 0 // 최소값
+            numberPicker.maxValue = 100 // 최대값
+            numberPicker.wrapSelectorWheel = true // 롤링 활성화
+
+            // AlertDialog 빌더
+            val dialog = AlertDialog.Builder(requireContext())
+                .setTitle("수량 선택")
+                .setView(dialogView) // 커스텀 레이아웃 설정
+                .setPositiveButton("확인") { _, _ ->
+                    // 선택된 값 처리
+                    val selectedQuantity = numberPicker.value
+                    binding.quantityInput.setText(selectedQuantity.toString()) // EditText에 값 설정
+                }
+                .setNegativeButton("취소", null)
+                .create()
+
+            dialog.show()
+        }
+
+        binding.quantityInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) {
+                    // 힌트일 때는 왼쪽 정렬
+                    binding.quantityInput.gravity = Gravity.START or Gravity.CENTER_VERTICAL
+                } else {
+                    // 값이 입력되면 오른쪽 정렬
+                    binding.quantityInput.gravity = Gravity.END or Gravity.CENTER_VERTICAL
+                }
+            }
+        })
     }
 
-    private fun setupCategoryChips() {
+/*    private fun setupCategoryChips() {
         binding.categoryChipGroup.isSingleSelection = true
         val categories = resources.getStringArray(R.array.category_array)
-        for (category in categories.drop(1)) {
-            val chip = Chip(context)
-            chip.text = category
-            chip.isCheckable = true
+
+        for (category in categories) {
+            val chip = Chip(requireContext()).apply {
+                text = category
+                isCheckable = true
+            }
             binding.categoryChipGroup.addView(chip)
         }
-    }
+    }*/
 
     private fun setupFieldsFromArguments() {
         val productName = arguments?.getString("productName")
@@ -109,7 +170,9 @@ class InventoryInsertFragment : Fragment() {
         binding.productNameInput.setText(productName)
         binding.purchaseDateInput.setText(purchaseDate?.substringBefore("T"))
         binding.expirationDateInput.setText(expirationDate?.substringBefore("T"))
-        quantity?.let { binding.quantityPicker.value = it }
+        quantity?.let {
+            binding.quantityInput.setText(it.toString())
+        }
         category?.let {
             binding.categoryChipGroup.children.forEach { chip ->
                 if (chip is Chip && chip.text.toString() == it) {
@@ -192,7 +255,7 @@ class InventoryInsertFragment : Fragment() {
         val productName = binding.productNameInput.text.toString()
         val purchaseDate = parseDate(binding.purchaseDateInput.text.toString())
         val expirationDate = parseDate(binding.expirationDateInput.text.toString())
-        val quantity = binding.quantityPicker.value
+        val quantity = binding.quantityInput.text.toString().toIntOrNull() ?: 0
         val stockLocation = getSelectedStockLocation()
         val category = getSelectedCategory()
 

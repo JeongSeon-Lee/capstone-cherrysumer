@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/white">
 
     <FrameLayout
         android:id="@+id/nav_content"
@@ -20,9 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:menu="@menu/bottom_nav_menu"
-        android:background="?android:attr/windowBackground"
-        app:labelVisibilityMode="labeled" />
-
+        android:background="#F5F5F5"
+        app:labelVisibilityMode="labeled"
+        android:paddingVertical="12dp"
+        style="@style/CustomBottomNavigationView" />
 </LinearLayout>
-
 

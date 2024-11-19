@@ -7,17 +7,23 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.PopupWindow
+import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,6 +61,7 @@ class InventoryListFragment : Fragment() {
             updateItemQuantity(itemId, updatedItem, position)
         }
 
+        setupAllSpinners()
         setupFiltersVisibility()
         setupHelpButton(binding.helpButton)
 
@@ -64,6 +71,24 @@ class InventoryListFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun setupAllSpinners() {
+        val spinnerData = listOf(
+            Triple(binding.categorySpinner, R.array.category_array, R.layout.spinner_item),
+            Triple(binding.sortSpinner, R.array.sort_array, R.layout.spinner_item),
+            Triple(binding.stockLocationSpinner, R.array.stock_location_array, R.layout.spinner_item)
+        )
+
+        spinnerData.forEach { (spinner, arrayResId, itemLayoutResId) ->
+            val adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                arrayResId,
+                itemLayoutResId
+            )
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
     }
 
     private fun setupFiltersVisibility() {
@@ -81,13 +106,48 @@ class InventoryListFragment : Fragment() {
         binding.helpButton.setOnClickListener {
             val inflater = LayoutInflater.from(requireContext())
             val tooltipView = inflater.inflate(R.layout.tooltip_layout, null)
+
+            // 각 TextView에 HTML 적용
+            val dDayTextView: TextView = tooltipView.findViewById(R.id.tooltip_text_d_day)
+            val quantityTextView: TextView = tooltipView.findViewById(R.id.tooltip_text_quantity)
+            val addTextView: TextView = tooltipView.findViewById(R.id.tooltip_text_add)
+            val modifyDeleteTextView: TextView = tooltipView.findViewById(R.id.tooltip_text_modify_delete)
+
+            // 각각의 텍스트 설정 (HTML로 강조)
+            val dDayText = "<b>디데이</b>: 유통기한까지 남은 날짜를 알려줍니다. 3일 남으면 경고등이 켜집니다."
+            val quantityText = "<b>수량</b>: 해당 상품의 수량을 알려줍니다. 2개 남으면 경고등이 켜집니다."
+            val addText = "<b>추가</b>: 오른쪽 하단의 연필 버튼을 누르면 항목을 추가할 수 있습니다."
+            val modifyDeleteText = "<b>수정‧삭제</b>: 원하는 항목을 왼쪽으로 슬라이드하면 기능이 보입니다."
+
+            // 텍스트 적용
+            dDayTextView.text = Html.fromHtml(dDayText, Html.FROM_HTML_MODE_LEGACY)
+            quantityTextView.text = Html.fromHtml(quantityText, Html.FROM_HTML_MODE_LEGACY)
+            addTextView.text = Html.fromHtml(addText, Html.FROM_HTML_MODE_LEGACY)
+            modifyDeleteTextView.text = Html.fromHtml(modifyDeleteText, Html.FROM_HTML_MODE_LEGACY)
+
+            // 팝업 생성
+            val displayMetrics = resources.displayMetrics
+            val screenWidth = displayMetrics.widthPixels
+            val horizontalMargin = (screenWidth * 0.07).toInt() // 좌우 마진 5%
+            val popupWidth = screenWidth - (horizontalMargin * 2) // 팝업 너비 = 전체 너비 - 좌우 마진
+
             val popupWindow = PopupWindow(
                 tooltipView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
+                popupWidth,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 true
             )
-            popupWindow.showAsDropDown(view, 0, 0)
+
+            // 툴팁 표시 (화면 중앙, Y축 오프셋 포함)
+            val yOffset = -155 // 화면 중심에서 위로 이동 (픽셀 단위, 필요에 따라 조정)
+            popupWindow.showAtLocation(
+                view, // 기준 뷰
+                Gravity.CENTER, // 화면 중앙
+                0, // X축 오프셋
+                yOffset  // Y축 오프셋 (위로 이동)
+            )
+
+            // 일정 시간 후 닫기
             tooltipView.postDelayed({ popupWindow.dismiss() }, 5000)
         }
     }
@@ -502,24 +562,49 @@ class SwipeController : ItemTouchHelper.Callback() {
 
     // 버튼 그리기
     private fun drawButtons(c : Canvas, viewHolder: RecyclerView.ViewHolder){
-        val buttonWidthWithoutPadding = buttonWidth - 20
-        val corners = 16F
+        val buttonWidthWithoutPadding = buttonWidth - 30
+        val corners = 0F
         val itemView = viewHolder.itemView
         val p  = Paint()
 
         // 왼쪽 버튼 그리기
-        val leftButton = RectF(itemView.left.toFloat(),itemView.top.toFloat(),
-            itemView.left+buttonWidthWithoutPadding,itemView.bottom.toFloat())
-        p.color = Color.BLUE
-        c.drawRoundRect(leftButton,corners,corners,p)
-        drawText("EDIT", c,leftButton,p)
+        val leftButton = RectF(
+            itemView.left.toFloat(),
+            itemView.top.toFloat(),
+            itemView.left + buttonWidthWithoutPadding,
+            itemView.bottom.toFloat()
+        )
+        p.color = Color.parseColor("#FF8B8B")
+        c.drawRoundRect(leftButton, corners, corners, p)
+
+        val leftIcon = ContextCompat.getDrawable(itemView.context, R.drawable.ic_write) // 왼쪽 버튼 아이콘
+        val leftIconSize = 80 // 아이콘 크기
+        val leftIconLeft = (leftButton.centerX() - leftIconSize / 2).toInt()
+        val leftIconTop = (leftButton.centerY() - leftIconSize / 2).toInt()
+        val leftIconRight = (leftButton.centerX() + leftIconSize / 2).toInt()
+        val leftIconBottom = (leftButton.centerY() + leftIconSize / 2).toInt()
+        leftIcon?.setBounds(leftIconLeft, leftIconTop, leftIconRight, leftIconBottom)
+        leftIcon?.draw(c)
 
         // 오른쪽 버튼 그리기
-        val rightButton = RectF(itemView.right-buttonWidthWithoutPadding,
-            itemView.top.toFloat(),itemView.right.toFloat(),itemView.bottom.toFloat())
-        p.color = Color.RED
-        c.drawRoundRect(rightButton,corners,corners,p)
-        drawText("DELETE",c,rightButton,p)
+        val rightButton = RectF(
+            itemView.right - buttonWidthWithoutPadding,
+            itemView.top.toFloat(),
+            itemView.right.toFloat(),
+            itemView.bottom.toFloat()
+        )
+        p.color = Color.parseColor("#FF5959")
+        c.drawRoundRect(rightButton, corners, corners, p)
+
+        val rightIcon = ContextCompat.getDrawable(itemView.context, R.drawable.ic_delete) // 오른쪽 버튼 아이콘
+        val rightIconSize = 80 // 아이콘 크기
+        val rightIconLeft = (rightButton.centerX() - rightIconSize / 2).toInt()
+        val rightIconTop = (rightButton.centerY() - rightIconSize / 2).toInt()
+        val rightIconRight = (rightButton.centerX() + rightIconSize / 2).toInt()
+        val rightIconBottom = (rightButton.centerY() + rightIconSize / 2).toInt()
+        rightIcon?.setBounds(rightIconLeft, rightIconTop, rightIconRight, rightIconBottom)
+        rightIcon?.draw(c)
+
 
         buttonInstance = null
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE){

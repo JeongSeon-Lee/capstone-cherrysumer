@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/popup_menu_background">
+
+    <TextView
+        android:id="@+id/menu_direct_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:text="직접 입력"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_gray" />
+
+    <TextView
+        android:id="@+id/menu_import_purchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:text="공동구매 가져오기"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="16sp" />
+</LinearLayout>

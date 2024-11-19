@@ -1,6 +1,7 @@
 package com.example.cherrysumer
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -10,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.cherrysumer.databinding.FragmentSearchBinding
 import com.example.cherrysumer.retrofit.ApiCallback
@@ -178,23 +180,30 @@ class SearchFragment : Fragment() {
         recentSearches.forEach { item ->
             val chip = Chip(context).apply {
                 text = item.name
-                isCloseIconVisible = true // 닫기 아이콘 표시
+                isCloseIconVisible = true
+                setTextColor(ContextCompat.getColor(context, R.color.black))
+                chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white))
+                chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.light_gray))
+                chipStrokeWidth = 1f
+                chipCornerRadius = 24f
 
-                // Chip 클릭 시
+                // 클릭 이벤트
                 setOnClickListener {
-                    currentQuery = item.name // 현재 쿼리 설정
+                    currentQuery = item.name
                     useFirstLayout = false
                     updateLayout() // 두 번째 레이아웃으로 전환
                 }
 
-                // 닫기 아이콘 클릭 시
+                // 닫기 아이콘 클릭 이벤트
                 setOnCloseIconClickListener {
                     deleteRecentSearch(item) { success ->
-                        if (success) chipGroup.removeView(this) // 성공 시 Chip 제거
+                        if (success) chipGroup.removeView(this)
                         else showToast("삭제에 실패했습니다.")
                     }
                 }
             }
+            // 디버그 메시지 추가
+            Log.d("ChipDebug", "Text: ${chip.text}, Background: ${chip.chipBackgroundColor}, Stroke: ${chip.chipStrokeColor}")
             chipGroup.addView(chip) // ChipGroup에 추가
         }
     }
@@ -203,6 +212,7 @@ class SearchFragment : Fragment() {
         ApiManager().getRecentSearchLogs(object : ApiCallback<List<RecentSearchItem>> {
             override fun onSuccess(apiResponse: ApiResponse<List<RecentSearchItem>>?) {
                 val searchItems = apiResponse?.data.orEmpty()
+                    .filter { it.state == true }
                 setupRecentSearchChips(chipGroup, searchItems) // 검색어를 Chip으로 표시
                 super.onSuccess(apiResponse)
             }

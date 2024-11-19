@@ -3,56 +3,80 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/white">
 
+    <!-- 스피너 컨테이너 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:gravity="center_vertical"
+        android:padding="6dp">
 
-        <Spinner
-            android:id="@+id/category_spinner"
+        <!-- 스피너 그룹 -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:entries="@array/category_array"
-            android:minHeight="48dp"
-            android:padding="12dp" />
+            android:orientation="horizontal"
+            android:gravity="start">
 
-        <Spinner
-            android:id="@+id/sort_spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:entries="@array/sort_array"
-            android:minHeight="48dp"
-            android:padding="12dp" />
+            <!-- 카테고리 스피너 -->
+            <Spinner
+                android:id="@+id/category_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@drawable/spinner_background"
+                android:entries="@array/category_array"
+                android:spinnerMode="dropdown"
+                android:layout_marginLeft="8dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="12dp" />
 
-        <Spinner
-            android:id="@+id/stock_location_spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:entries="@array/stock_location_array"
-            android:minHeight="48dp"
-            android:padding="12dp" />
+            <!-- 정렬 스피너 -->
+            <Spinner
+                android:id="@+id/sort_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@drawable/spinner_background"
+                android:entries="@array/sort_array"
+                android:spinnerMode="dropdown"
+                android:layout_marginStart="8dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="12dp" />
 
+            <!-- 저장소 스피너 -->
+            <Spinner
+                android:id="@+id/stock_location_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@drawable/spinner_background"
+                android:entries="@array/stock_location_array"
+                android:spinnerMode="dropdown"
+                android:layout_marginStart="8dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="12dp" />
+        </LinearLayout>
+
+        <!-- 도움말 버튼 -->
         <ImageButton
             android:id="@+id/help_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginRight="8dp"
             android:background="?attr/selectableItemBackground"
-            android:contentDescription="Help"
-            android:src="@drawable/ic_help" />
+            android:src="@drawable/ic_help"
+            android:contentDescription="도움말" />
     </LinearLayout>
 
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp" />
-
+        android:padding="8dp" />
 </LinearLayout>
-
