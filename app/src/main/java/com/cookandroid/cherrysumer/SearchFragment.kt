@@ -173,7 +173,20 @@ class SearchFragment : Fragment() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true) // 업 버튼 활성화
             supportActionBar?.title = "" // 제목 설정 없음
         }
+
+        // 업 버튼 이미지 변경
+        val navigationIconRes = if (useFirstLayout) {
+            R.drawable.ic_close // 첫 번째 레이아웃에서 사용할 이미지
+        } else {
+            R.drawable.ic_back // 두 번째 레이아웃에서 사용할 이미지
+        }
+
+        toolbar.setNavigationIcon(navigationIconRes) // 동적으로 이미지 설정
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed() // 업 버튼 클릭 시 동작
+        }
     }
+
 
     private fun setupRecentSearchChips(chipGroup: ChipGroup, recentSearches: List<RecentSearchItem>) {
         chipGroup.removeAllViews() // 기존 Chip 제거

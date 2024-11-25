@@ -150,14 +150,17 @@ class ChatRoomListFragment : Fragment() {
             override fun onSuccess(apiResponse: ApiResponse<List<ChatRoom>>?) {
                 val chatRooms = apiResponse?.data ?: emptyList()
                 adapter.updateChatRooms(chatRooms)
+                super.onSuccess(apiResponse)
             }
 
             override fun onError(response: Response<ApiResponse<List<ChatRoom>>>) {
                 Toast.makeText(requireContext(), "Failed to load chat rooms", Toast.LENGTH_SHORT).show()
+                super.onError(response)
             }
 
             override fun onFailure(throwable: Throwable) {
                 Toast.makeText(requireContext(), "Network error: ${throwable.message}", Toast.LENGTH_SHORT).show()
+                super.onFailure(throwable)
             }
         })
     }

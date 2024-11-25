@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -60,15 +61,39 @@ class ChatMessageFragment : Fragment() {
         (activity as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
         val actionBar = (activity as? AppCompatActivity)?.supportActionBar
 
-        actionBar?.setDisplayShowTitleEnabled(false)
-        binding.toolbarTitle.text = "로딩 중..."
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_back) // 업 버튼 이미지 설정
+        }
+
         binding.toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            if (parentFragmentManager.backStackEntryCount > 0) {
+                parentFragmentManager.popBackStack()
+            } else {
+                activity?.onBackPressedDispatcher?.onBackPressed()
+            }
+        }
+    }
+
+    private fun setupEditTextFocusListener() {
+        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation)
+
+        // EditText 포커스 변화 리스너 추가
+        binding.editTextMessage.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                // 포커스가 잡히면 하단 네비게이션 숨기기
+                bottomNav?.visibility = View.GONE
+            } else {
+                // 포커스가 해제되면 하단 네비게이션 보이기
+                bottomNav?.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun setupUI() {
+        setupEditTextFocusListener()
+
         binding.buttonSend.setOnClickListener {
             val message = binding.editTextMessage.text.toString().trim()
             if (message.isNotEmpty()) {
@@ -79,9 +104,9 @@ class ChatMessageFragment : Fragment() {
             }
         }
 
-        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation)
+/*        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation)
+        var isKeyboardVisible = false
 
-        // 키보드 상태 감지 리스너 추가
         binding.root.viewTreeObserver.addOnGlobalLayoutListener {
             val rect = android.graphics.Rect()
             binding.root.getWindowVisibleDisplayFrame(rect)
@@ -89,16 +114,14 @@ class ChatMessageFragment : Fragment() {
             val screenHeight = binding.root.rootView.height
             val keypadHeight = screenHeight - rect.bottom
 
-            // 키보드가 올라왔는지 확인 (키보드 높이가 화면의 25% 이상인 경우)
-            if (keypadHeight > screenHeight * 0.25) {
-                // 키보드가 올라왔을 때 하단 네비게이션 숨기기
-                bottomNav?.visibility = View.GONE
-            } else {
-                // 키보드가 내려갔을 때 하단 네비게이션 보이기
-                bottomNav?.visibility = View.VISIBLE
+            val keyboardNowVisible = keypadHeight > screenHeight * 0.25
+            if (keyboardNowVisible != isKeyboardVisible) {
+                isKeyboardVisible = keyboardNowVisible
+                bottomNav?.visibility = if (isKeyboardVisible) View.GONE else View.VISIBLE
             }
-        }
+        }*/
     }
+
 
     private fun setupStompClient() {
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)

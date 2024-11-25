@@ -73,6 +73,7 @@ class InventoryInsertFragment : Fragment() {
 
         // 업 버튼 활성화
         actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
         binding.toolbar.setNavigationOnClickListener {
             // 뒤로 가기 동작
             activity?.onBackPressed()
