@@ -1,0 +1,77 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- 메인 컨텐츠 영역 -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- 프로필 이미지 -->
+        <ImageView
+            android:id="@+id/imageViewProfile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/circle_background"
+            android:contentDescription="프로필 이미지"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile_placeholder" />
+
+        <!-- 텍스트 정보 영역 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- 방 이름 -->
+            <TextView
+                android:id="@+id/textViewRoomName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:text="낭집사"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- 마지막 메시지 -->
+            <TextView
+                android:id="@+id/textViewLastMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="네네! 그렇게 변경합시다!"
+                android:textColor="#777777"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- 메시지 시간 -->
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="오후 10:34"
+            android:textColor="#777777"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- 레이어 위에 배치할 배지 -->
+    <TextView
+        android:id="@+id/overlayBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="4dp"
+        android:background="#CCD3D3D3"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp"
+        android:text="참여"
+        android:textColor="@android:color/black"
+        android:textSize="10sp" />
+</FrameLayout>

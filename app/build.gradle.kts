@@ -77,5 +77,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation("com.jakewharton.threetenabp:threetenabp:1.4.4")
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation ("io.reactivex.rxjava2:rxjava:2.2.5")
+    implementation ("io.reactivex.rxjava2:rxandroid:2.1.0")
 
 }

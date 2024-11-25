@@ -1,6 +1,7 @@
 package com.cookandroid.cherrysumer.retrofit
 
 import android.util.Log
+import com.cookandroid.cherrysumer.models.ChatRoom
 import com.cookandroid.cherrysumer.retrofit.models.ApiResponse
 import com.cookandroid.cherrysumer.retrofit.models.InventoryItem
 import com.cookandroid.cherrysumer.retrofit.models.PostItem
@@ -9,6 +10,7 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Path
 
 class ApiManager {
     private val apiService: ApiService = MyApplication.networkService
@@ -47,6 +49,10 @@ class ApiManager {
 
     fun deleteRecentSearchLog(jsonObject: JsonObject, callback: ApiCallback<Unit>) {
         apiService.deleteRecentSearchLog(jsonObject).enqueue(createCallback(callback))
+    }
+
+    fun getChatRooms(status: String, callback: ApiCallback<List<ChatRoom>>) {
+        apiService.getChatRooms(status).enqueue(createCallback(callback))
     }
 
     private fun <T> createCallback(callback: ApiCallback<T>): Callback<ApiResponse<T>> {

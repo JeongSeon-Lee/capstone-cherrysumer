@@ -89,6 +89,9 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_chats -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, ChatRoomListFragment())
+                        .commit()
                     setupActiveNavIcons(item.itemId)
                     true
                 }
@@ -101,10 +104,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_mypage -> {
                     setupActiveNavIcons(item.itemId)
-/*                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.nav_content, PostListFragment())
-                        .commit()
-                    setupActiveNavIcons(item.itemId)*/
                     // 마이페이지 프래그먼트로 전환
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, MyPageFragment())

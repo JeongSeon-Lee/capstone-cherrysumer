@@ -8,7 +8,7 @@
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
     android:elevation="6dp"
-    android:gravity="center">
+    android:gravity="start">
 
     <TextView
         android:id="@+id/tooltip_text_d_day"

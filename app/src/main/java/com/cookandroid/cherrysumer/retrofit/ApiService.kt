@@ -1,5 +1,6 @@
 package com.cookandroid.cherrysumer.retrofit
 
+import com.cookandroid.cherrysumer.models.ChatRoom
 import com.cookandroid.cherrysumer.retrofit.models.ApiResponse
 import com.cookandroid.cherrysumer.retrofit.models.InventoryItem
 import com.cookandroid.cherrysumer.retrofit.models.PostItem
@@ -41,5 +42,9 @@ interface ApiService {
 
     @HTTP(method = "DELETE", path = "api/search-log/delete", hasBody = true)
     fun deleteRecentSearchLog(@Body request: JsonObject): Call<ApiResponse<Unit>>
+
+    @GET("v1/chatRoom/list/{status}")
+    fun getChatRooms(@Path("status") status: String): Call<ApiResponse<List<ChatRoom>>>
+
 
 }

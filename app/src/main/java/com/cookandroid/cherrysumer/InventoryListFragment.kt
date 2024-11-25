@@ -114,10 +114,10 @@ class InventoryListFragment : Fragment() {
             val modifyDeleteTextView: TextView = tooltipView.findViewById(R.id.tooltip_text_modify_delete)
 
             // 각각의 텍스트 설정 (HTML로 강조)
-            val dDayText = "<b>디데이</b>: 유통기한까지 남은 날짜를 알려줍니다. 3일 남으면 경고등이 켜집니다."
-            val quantityText = "<b>수량</b>: 해당 상품의 수량을 알려줍니다. 2개 남으면 경고등이 켜집니다."
-            val addText = "<b>추가</b>: 오른쪽 하단의 연필 버튼을 누르면 항목을 추가할 수 있습니다."
-            val modifyDeleteText = "<b>수정‧삭제</b>: 원하는 항목을 왼쪽으로 슬라이드하면 기능이 보입니다."
+            val dDayText = "<b>디데이</b> : 유통기한까지 남은 날짜를 알려줍니다. 3일 남으면 경고등이 켜집니다."
+            val quantityText = "<b>수량</b> : 해당 상품의 수량을 알려줍니다. 2개 남으면 경고등이 켜집니다."
+            val addText = "<b>추가</b> : 오른쪽 하단의 연필 버튼을 누르면 항목을 추가할 수 있습니다."
+            val modifyDeleteText = "<b>수정 ‧ 삭제</b> : 원하는 항목을 왼쪽으로 슬라이드하면 기능이 보입니다."
 
             // 텍스트 적용
             dDayTextView.text = Html.fromHtml(dDayText, Html.FROM_HTML_MODE_LEGACY)

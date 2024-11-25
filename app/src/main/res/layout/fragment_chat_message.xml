@@ -1,0 +1,220 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <!-- 툴바 -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <!-- 중앙 정렬 타이틀 -->
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- 툴바 아래 테두리 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_gray" />
+
+    <!-- NestedScrollView로 감싸기 -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- PostInfo 표시 영역 -->
+            <LinearLayout
+                android:id="@+id/layoutPostInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="12dp"
+                android:background="@drawable/post_info_background"
+                android:clipToPadding="false"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="38dp"
+                android:paddingVertical="24dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:text="게시글 정보"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- 게시글 이미지 -->
+                    <ImageView
+                        android:id="@+id/imagePost"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_cherry" />
+
+                    <!-- 게시글 정보 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/ic_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_price" />
+
+                                <ImageView
+                                    android:id="@+id/ic_date"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="4dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_date" />
+
+                                <ImageView
+                                    android:id="@+id/ic_location"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="4dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_location" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textPrice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/textDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp" />
+
+
+                                <TextView
+                                    android:id="@+id/textPlace"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewChat"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <!-- 플러스 버튼 -->
+        <ImageView
+            android:id="@+id/buttonAdd"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="추가 버튼"
+            android:padding="8dp"
+            android:src="@drawable/ic_plus" />
+
+        <!-- 메시지 입력 필드 -->
+        <EditText
+            android:id="@+id/editTextMessage"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_input_background"
+            android:hint="메시지 입력"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:textSize="14sp" />
+
+        <!-- 전송 버튼 -->
+        <ImageView
+            android:id="@+id/buttonSend"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/circle_background"
+            android:contentDescription="전송 버튼"
+            android:padding="8dp"
+            android:src="@drawable/ic_send" />
+    </LinearLayout>
+
+</LinearLayout>

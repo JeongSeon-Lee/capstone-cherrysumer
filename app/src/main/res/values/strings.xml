@@ -47,5 +47,7 @@
     <string name="fridge">냉장실</string>
     <string name="freezer">냉동실</string>
     <string name="outdoor_storage">실외 저장소</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
