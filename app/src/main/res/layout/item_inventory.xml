@@ -12,7 +12,7 @@
     <!-- D-Day 배지 -->
     <TextView
         android:id="@+id/item_dday"
-        android:layout_width="50dp"
+        android:layout_width="51dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:background="@color/light_gray"
@@ -20,7 +20,7 @@
         android:paddingHorizontal="8dp"
         android:paddingVertical="2dp"
         android:textSize="12sp"
-        android:text="D-356" />
+        android:text="D-DAY" />
 
     <!-- 아이템 내용 -->
     <LinearLayout
