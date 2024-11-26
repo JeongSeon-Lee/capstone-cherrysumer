@@ -205,7 +205,7 @@ data class RecentSearchResponse(
     val isSuccess: Boolean,
     val code: String,
     val message: String,
-    val data: List<RecentSearchItem>
+    val data: List<RecentSearchItem>?
 )
 
 data class RecentSearchItem(

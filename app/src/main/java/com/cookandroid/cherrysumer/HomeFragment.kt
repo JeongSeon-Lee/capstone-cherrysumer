@@ -26,6 +26,7 @@ import android.os.Parcelable
 import android.widget.Button
 import android.widget.ImageButton
 import com.bumptech.glide.Glide
+import com.cookandroid.cherrysumer.mypage.MyRegionSettingActivity
 import com.cookandroid.cherrysumer.mypage.StatusActivity
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
@@ -44,6 +45,7 @@ class HomeFragment : Fragment() {
     private lateinit var postService: PostService
     private lateinit var searchButton: ImageButton
     private lateinit var option1Container: LinearLayout
+    private lateinit var option2Container: LinearLayout
 
     private var selectedArrFilter: String? = null // 정렬 필터 상태 저장
     private var selectedCategoryFilter: String? = null // 카테고리 필터 상태 저장
@@ -67,6 +69,7 @@ class HomeFragment : Fragment() {
         // Spinner 초기화
         spinner = view.findViewById(R.id.user_spot_select)
 
+
         // 이전 페이지에서 전달받은 지역명(region)을 가져와서 사용
         val region = arguments?.getString("region") ?: "지역 없음"
         val items = listOf(region, "내 동네 설정")
@@ -78,8 +81,20 @@ class HomeFragment : Fragment() {
         regionPostTitle = view.findViewById(R.id.region_post_title)
         regionPostTitle.text = "$region 게시글"
 
-        option1Container = view.findViewById(R.id.option2_container)
+
+        option1Container = view.findViewById(R.id.option1_container)
         option1Container.setOnClickListener {
+            val inventoryCheckFragment = InventoryCheckFragment()
+
+            // 프래그먼트를 교체
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, inventoryCheckFragment) // fragment_container는 호스트 액티비티의 FrameLayout ID
+                .addToBackStack(null) // 뒤로가기 시 이전 프래그먼트로 돌아가기
+                .commit()
+        }
+
+        option2Container = view.findViewById(R.id.option2_container)
+        option2Container.setOnClickListener {
             val intent = Intent(activity, StatusActivity::class.java)
             startActivity(intent)
         }
@@ -195,8 +210,45 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     val postResponse = response.body()!!
                     Log.d("HomeActivity", "서버 응답 성공: $postResponse")
-                    if (postResponse.isSuccess && postResponse.data.isNotEmpty()) {
-                        displayPosts(postResponse.data)
+
+                    // 수정된 부분: data.posts를 사용
+                    if (postResponse.isSuccess && postResponse.data.posts.isNotEmpty()) {
+                        val postLoadingData = postResponse.data
+                        val region = postLoadingData.region
+                        val name = postLoadingData.name
+
+                        // 사용자 이름과 지역명 설정
+                        userNameTextView.text = "$name\u200B님!"
+                        regionPostTitle.text = "$region 게시글"
+
+                        // Spinner 데이터 설정 및 초기화
+                        val items = listOf(region, "내 동네 설정")
+                        val adapter = CustomSpinnerAdapter(requireContext(), items)
+                        spinner.adapter = adapter
+
+                        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                when (position) {
+                                    1 -> { // "내 동네 설정" 클릭
+                                        val intent = Intent(activity, MyRegionSettingActivity::class.java)
+                                        intent.putExtra("currentRegion", region)
+                                        startActivity(intent)
+
+                                        // Spinner 상태를 원래 region 값으로 유지
+                                        spinner.setSelection(0)
+                                    }
+                                    else -> {
+                                        Log.d("HomeActivity", "현재 선택된 지역: $region")
+                                    }
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                // 아무 것도 선택되지 않았을 경우 처리
+                            }
+                        }
+
+                        displayPosts(postResponse.data.posts) // data.posts로 게시글 목록을 가져옵니다.
                     } else {
                         postContainer.removeAllViews() // 이전 뷰 제거
                         // 게시물이 없을 경우 처리
@@ -209,8 +261,8 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                // 네트워크 또는 서버 오류 발생
-                Log.e("HomeActivity", "네트워크 오류: ${t.message}")
+                // 네트워크 오류 등 실패 처리
+                Log.e("HomeActivity", "API 요청 실패: ${t.message}")
             }
         })
     }
@@ -220,9 +272,84 @@ class HomeFragment : Fragment() {
         if (!isAdded) return
 
         postContainer.removeAllViews() // 이전 게시물 뷰 제거
-        for (post in posts) {
-            addPostItem(post)
+
+        // 키워드 데이터 요청 후 UI 업데이트
+        fetchKeywordData { keywords ->
+            // 게시물 목록을 순회하며 뷰 추가
+            for ((index, post) in posts.withIndex()) {
+                // 다섯 번째 게시물 위치에 키워드 추천 XML 추가 (키워드가 있는 경우만)
+                if (index == 4 && keywords.isNotEmpty()) {
+                    // user_like_category_question.xml을 인플레이트해서 categoryBoxView 생성
+                    val categoryBoxView = layoutInflater.inflate(R.layout.user_like_category_question, null)
+                    addKeywordRecommendation(categoryBoxView, keywords) // 키워드 추천을 추가
+                    postContainer.addView(categoryBoxView) // categoryBoxView를 postContainer에 추가
+                }
+                addPostItem(post) // 게시물 추가
+            }
         }
+    }
+
+    // 키워드 추천 뷰를 추가하는 함수
+    private fun addKeywordRecommendation(categoryBoxView: View, keywords: List<String>) {
+        // categoryBoxView에서 category_box를 찾습니다
+        val categoryBox: LinearLayout = categoryBoxView.findViewById(R.id.category_box)
+
+        // 기존의 아이템들을 초기화 (새로운 데이터를 추가하기 전에 기존 항목을 지움)
+        categoryBox.removeAllViews()
+
+        // 서버로부터 받은 각 키워드에 대해 동적으로 TextView를 추가
+        for (keyword in keywords) {
+            // category_box 안에 들어갈 새로운 TextView 생성
+            val keywordView = LayoutInflater.from(requireContext()).inflate(R.layout.inventory_check_itmes, categoryBox, false)
+
+            // TextView를 찾고 키워드를 설정
+            val keywordTextView: TextView = keywordView.findViewById(R.id.add_recent_word)
+            keywordTextView.text = keyword
+
+            // 키워드 뷰에 클릭 리스너 추가
+            keywordTextView.setOnClickListener {
+                // 클릭된 키워드를 검색 쿼리로 설정
+                val searchQuery = keyword
+                val bundle = Bundle().apply {
+                    putString("searchQuery", searchQuery) // 검색어 전달
+                }
+
+                // 검색 결과 화면으로 이동
+                val postSearchResultFragment = PostSearchResultFragment().apply {
+                    arguments = bundle // 전달된 Bundle 설정
+                }
+
+                // 프래그먼트 전환
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, postSearchResultFragment) // `fragment_container`는 메인 액티비티의 프래그먼트 컨테이너 ID
+                    .addToBackStack(null) // 뒤로 가기 지원
+                    .commit()
+            }
+
+            // 키워드 뷰를 category_box에 추가
+            categoryBox.addView(keywordView)
+        }
+    }
+
+    // 키워드 데이터 가져오기 함수
+    private fun fetchKeywordData(callback: (List<String>) -> Unit) {
+        // 예시 API 요청 (PostService에 fetchKeywords 메서드 추가 필요)
+        postService.fetchKeywords().enqueue(object : Callback<KeywordResponse> {
+            override fun onResponse(call: Call<KeywordResponse>, response: Response<KeywordResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val keywords = response.body()!!.data ?: emptyList() // null일 경우 빈 리스트 반환
+                    callback(keywords) // 키워드 데이터 반환
+                } else {
+                    Log.e("HomeFragment", "키워드 요청 실패: ${response.message()}")
+                    callback(emptyList()) // 빈 데이터 반환
+                }
+            }
+
+            override fun onFailure(call: Call<KeywordResponse>, t: Throwable) {
+                Log.e("HomeFragment", "키워드 요청 에러: ${t.message}")
+                callback(emptyList()) // 빈 데이터 반환
+            }
+        })
     }
 
 
@@ -377,7 +504,13 @@ data class PostResponse(
     val isSuccess: Boolean,
     val code: String,
     val message: String,
-    val data: List<Post>
+    val data: PostLoadingData
+)
+
+data class PostLoadingData(
+    val region: String,              // 지역 (예: 대연동)
+    val name: String,                // 사용자 이름 (예: test user)
+    val posts: List<Post>            // 게시글 목록
 )
 
 data class Post(
@@ -436,6 +569,13 @@ data class PostDetailData(
     val content: String
 )
 
+data class KeywordResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val data: List<String>? // 추천 키워드 리스트
+)
+
 interface PostService {
     // 게시글 목록 가져오기
     @GET("posts")
@@ -448,4 +588,7 @@ interface PostService {
     // 게시글 상세 정보 가져오기
     @GET("posts/{postId}")
     fun getPostDetail(@Path("postId") postId: Long): Call<PostDetailResponse>
+
+    @GET("posts/recommend")
+    fun fetchKeywords(): Call<KeywordResponse>
 }

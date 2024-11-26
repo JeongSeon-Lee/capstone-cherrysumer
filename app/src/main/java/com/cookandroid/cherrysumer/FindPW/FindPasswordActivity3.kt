@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +29,8 @@ class FindPasswordActivity3 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 액티비티의 전체 배경색을 하얀색으로 설정
+        window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         setContentView(R.layout.activity_pw_find3)
 
         previousButton = findViewById(R.id.previous_button)
@@ -120,7 +123,7 @@ class FindPasswordActivity3 : AppCompatActivity() {
 // 요청 데이터 모델
 data class ChangePasswordRequest(
     val loginId: String,
-    val pasaword: String
+    val password: String
 )
 
 // 응답 데이터 모델

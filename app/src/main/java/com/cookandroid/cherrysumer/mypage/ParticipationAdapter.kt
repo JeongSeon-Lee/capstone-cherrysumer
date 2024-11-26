@@ -1,14 +1,18 @@
 package com.cookandroid.cherrysumer.mypage
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.cookandroid.cherrysumer.InventoryInsertFragment
 import com.cookandroid.cherrysumer.MainActivity
 import com.cookandroid.cherrysumer.R
 import com.google.gson.Gson
@@ -90,6 +94,19 @@ class ParticipationAdapter(private val posts: MutableList<ParticipationPost>, pr
             // 게시글 클릭 시 상세 정보로 이동
             itemView.setOnClickListener {
                 fetchPostDetail(post.postId)
+            }
+
+            registerButton.setOnClickListener {
+                val intent = Intent(itemView.context, MainActivity::class.java).apply {
+                    putExtra("source", "registerPostItem")
+                    putExtra("targetFragment", "InventoryInsertFragment")
+                    putExtra("productName", post.productname)
+                    putExtra("purchaseDate", post.date)
+                    putExtra("postId", post.postId)  // 필요시 수정
+                    putExtra("category", post.category ?: "default")
+                    flags = Intent.FLAG_ACTIVITY_SINGLE_TOP // 기존 액티비티 재사용
+                }
+                (itemView.context as Activity).startActivity(intent)
             }
         }
 

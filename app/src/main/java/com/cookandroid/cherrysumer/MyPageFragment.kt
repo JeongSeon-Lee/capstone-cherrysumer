@@ -2,6 +2,7 @@ package com.cookandroid.cherrysumer
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,8 @@ import retrofit2.http.GET
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.DELETE
+import retrofit2.http.Header
 
 class MyPageFragment : Fragment() {
     private lateinit var mypageService: MypageService
@@ -75,6 +78,7 @@ class MyPageFragment : Fragment() {
                 intent.putExtra("email", it.email)
                 intent.putExtra("region", it.region)
                 intent.putExtra("profileImageUrl", it.profileImageUrl)
+                intent.putExtra("loginId", it.loginId)
                 startActivity(intent)
             }
         }
@@ -85,8 +89,81 @@ class MyPageFragment : Fragment() {
         setupClickListener(view, R.id.category_setting, CategorySettingActivity::class.java)
         setupClickListener(view, R.id.myRegion_setting, MyRegionSettingActivity::class.java)
         setupClickListener(view, R.id.notice, NoticeActivity::class.java)
-        setupClickListener(view, R.id.logout, LogoutActivity::class.java)
-        setupClickListener(view, R.id.bye, ByeActivity::class.java)
+        setupLogoutClickListener(view, R.id.logout)
+        byeClickListener(view, R.id.bye) {
+            showDeleteAccountDialog()
+        }
+    }
+
+    private fun showDeleteAccountDialog() {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_bye, null)
+        val dialog = android.app.AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        val cancelButton = dialogView.findViewById<Button>(R.id.cancel_button)
+        val deleteButton = dialogView.findViewById<Button>(R.id.decision_closed)
+
+        // "더 써볼래요" 클릭 시 다이얼로그 닫기
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // "떠날래요" 클릭 시 계정 삭제 함수 호출
+        deleteButton.setOnClickListener {
+            deleteAccount()
+            dialog.dismiss()  // 다이얼로그 닫기
+        }
+
+        dialog.show()
+    }
+
+    private fun deleteAccount() {
+        // SharedPreferences에서 저장된 토큰을 가져옴
+        val sharedPreferences = requireActivity().getSharedPreferences("CherrySumerprefs", AppCompatActivity.MODE_PRIVATE)
+        val token = sharedPreferences.getString("token", null)
+
+        if (token != null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    // DELETE 요청 보내기
+                    val response = mypageService.deleteAccount(token)
+                    if (response.isSuccessful) {
+                        Toast.makeText(requireContext(), "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                        logout()  // 로그아웃 처리
+                    } else {
+                        Toast.makeText(requireContext(), "회원탈퇴 실패: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.e("NetworkError", "네트워크 오류: ${e.message}", e)
+                    Toast.makeText(requireContext(), "네트워크 오류", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    // 로그아웃 버튼 클릭 리스너
+    private fun setupLogoutClickListener(view: View, id: Int) {
+        val button: TextView = view.findViewById(id)
+        button.setOnClickListener {
+            logout() // 로그아웃 처리
+        }
+    }
+
+    // 로그아웃 처리
+    private fun logout() {
+        // SharedPreferences에서 토큰 삭제
+        val sharedPreferences = requireActivity().getSharedPreferences("CherrySumerprefs", AppCompatActivity.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove("token") // 토큰 삭제
+        editor.apply() // 변경사항 저장
+
+        // 로그인 화면으로 이동
+        val intent = Intent(activity, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // 기존 액티비티 스택을 정리하고 새 로그인 화면으로 이동
+        startActivity(intent)
+        activity?.finish() // 현재 액티비티 종료
     }
 
     private fun setupClickListener(view: View, id: Int, activityClass: Class<*>) {
@@ -94,6 +171,13 @@ class MyPageFragment : Fragment() {
         button.setOnClickListener {
             val intent = Intent(activity, activityClass)
             startActivity(intent)
+        }
+    }
+
+    private fun byeClickListener(view: View, id: Int, onClickAction: () -> Unit) {
+        val button: TextView = view.findViewById(id)
+        button.setOnClickListener {
+            onClickAction()  // 전달된 함수 실행
         }
     }
 
@@ -127,9 +211,17 @@ class MyPageFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                Log.e("NetworkError", "네트워크 오류: ${e.message}", e)
                 Toast.makeText(view.context, "네트워크 오류", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val profileImageView: ImageView = requireView().findViewById(R.id.profile_image)
+        val nameTextView: TextView = requireView().findViewById(R.id.name)
+        fetchProfileData(requireView(), profileImageView, nameTextView)
     }
 }
 
@@ -145,11 +237,15 @@ data class ProfileData(
     val nickname: String,
     val email: String,
     val region: String,
-    val profileImageUrl: String
+    val profileImageUrl: String,
+    val loginId: String
 )
 
 
 interface MypageService {
     @GET("mypage/profile")
     suspend fun getProfile(): Response<ProfileResponse>
+
+    @DELETE("mypage/deleteAccount")
+    suspend fun deleteAccount(@Header("Authorization") token: String): Response<Void>
 }

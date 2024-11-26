@@ -3,6 +3,7 @@ package com.cookandroid.cherrysumer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.cookandroid.cherrysumer.databinding.ActivityMainBinding
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         // js
         window.statusBarColor = ContextCompat.getColor(this, R.color.white)
@@ -31,10 +33,29 @@ class MainActivity : AppCompatActivity() {
 
         val postDetailsJson = intent.getStringExtra("postDetailsJson")
         val previousActivity = intent.getStringExtra("previousActivity")
+        val targetFragment = intent.getStringExtra("targetFragment") // 재고 등록
 
-        // postDetailsJson이 null이 아니면 PostDetailFragment 띄우기
-        if (postDetailsJson != null) {
-            // PostDetailFragment로 데이터 전달
+        // targetFragment가 InventoryInsertFragment이면 재고 등록 화면으로 이동
+        if (targetFragment == "InventoryInsertFragment") {
+            // 재고 등록 화면으로 이동
+            val inventoryInsertFragment = InventoryInsertFragment().apply {
+                val bundle = Bundle().apply {
+                    putString("productName", intent.getStringExtra("productName"))
+                    putString("purchaseDate", intent.getStringExtra("purchaseDate"))
+                    putString("expirationDate", intent.getStringExtra("expirationDate"))
+                    putInt("quantity", intent.getIntExtra("quantity", 0))
+                    putString("stockLocation", intent.getStringExtra("stockLocation"))
+                    putString("category", intent.getStringExtra("category"))
+                }
+                arguments = bundle
+            }
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, inventoryInsertFragment)
+                .commit()
+
+        } else if (postDetailsJson != null) {
+            // postDetailsJson이 null이 아니면 PostDetailFragment 띄우기
             val postDetailFragment = PostDetailFragment().apply {
                 arguments = Bundle().apply {
                     putString("postDetailsJson", postDetailsJson)  // 그대로 JSON 전달
@@ -42,7 +63,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            // fragment_container에 PostDetailFragment 띄우기
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, postDetailFragment)
                 .addToBackStack(null)

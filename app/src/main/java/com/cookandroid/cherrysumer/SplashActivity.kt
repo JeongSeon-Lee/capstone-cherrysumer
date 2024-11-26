@@ -25,6 +25,8 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("SplashActivity", "onCreate() called")
+        // 액티비티의 전체 배경색을 하얀색으로 설정
+        window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         super.onCreate(savedInstanceState)
 
         // js
@@ -113,6 +115,8 @@ class SplashActivity : AppCompatActivity() {
                     goToOnboarding()
                 }
             }
+
+
 
             override fun onFailure(call: Call<TokenValidationResponse>, t: Throwable) {
                 Log.e("SplashActivity", "Token validation failed: ${t.message}") // 실패 로그 추가

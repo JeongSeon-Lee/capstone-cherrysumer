@@ -207,7 +207,7 @@ class PostDetailFragment : Fragment() {
 
             if (data.closed) {
                 enjoyButton.isEnabled = false
-                enjoyButton.text = "마감"
+                enjoyButton.text = "    마감      "
                 closedButton.isEnabled = false
                 closedButton.text = "마감"
             } else {

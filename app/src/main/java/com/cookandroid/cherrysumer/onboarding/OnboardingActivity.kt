@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
 import com.cookandroid.cherrysumer.LoginActivity
@@ -16,6 +17,8 @@ class OnboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 액티비티의 전체 배경색을 하얀색으로 설정
+        window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         binding = DataBindingUtil.setContentView(this, R.layout.activity_onboarding)
 
         // 어댑터 설정

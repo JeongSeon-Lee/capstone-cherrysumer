@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.cookandroid.cherrysumer.LoginActivity
 import com.cookandroid.cherrysumer.R
 
@@ -18,6 +19,8 @@ class FindIdActivity2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 액티비티의 전체 배경색을 하얀색으로 설정
+        window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         setContentView(R.layout.activity_id_find2)
 
         previousButton = findViewById(R.id.previous_button)

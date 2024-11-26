@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.cookandroid.cherrysumer.FindID.FindIdActivity1
 import com.cookandroid.cherrysumer.FindPW.FindPasswordActivity1
@@ -24,6 +25,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 액티비티의 전체 배경색을 하얀색으로 설정
+        window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
         // Retrofit 초기화
@@ -74,7 +77,6 @@ class LoginActivity : AppCompatActivity() {
                     response.body()?.let { responseBody ->
                         if (responseBody.isSuccess) {
                             // 로그인 성공, 메인 화면으로 이동
-                            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
                             val token = responseBody.data?.token // JWT 토큰
                             saveToken(token ?: "") // 토큰 저장
                             // 추가적으로 지역 및 이름도 필요하다면 처리
@@ -95,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 } else {
                     // 다른 상태 코드 처리
-                    Toast.makeText(this@LoginActivity, "알 수 없는 오류 발생: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "아이디와 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 

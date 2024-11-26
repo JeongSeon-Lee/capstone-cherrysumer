@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <!-- ConstraintLayout 포함 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="25dp"
+        android:paddingBottom="20dp"
+        android:paddingHorizontal="25dp"
+        android:background="@drawable/round_radius_10dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_kr_medium"
+            android:includeFontPadding="false"
+            android:text="회원탈퇴"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_kr_regular"
+            android:includeFontPadding="false"
+            android:layout_marginTop="15dp"
+            android:text="회원 탈퇴 시 계정 정보 및 이용기록은 모두 삭제되며, 삭제된 데이터는 복구가 불가능합니다.\n\n
+정말로 탈퇴하시겠어요?"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="25dp"
+            app:layout_constraintTop_toBottomOf="@+id/description">
+
+            <android.widget.Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="26dp"
+                android:background="@drawable/button_grey_color"
+                android:fontFamily="@font/notosans_kr_medium"
+                android:textSize="16sp"
+                android:textColor="#747474"
+                android:includeFontPadding="false"
+                android:text="더 써볼래요"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <android.widget.Button
+                android:id="@+id/decision_closed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="36dp"
+                android:background="@drawable/button_pink_color"
+                android:fontFamily="@font/notosans_kr_medium"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                android:includeFontPadding="false"
+                android:text="떠날래요"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

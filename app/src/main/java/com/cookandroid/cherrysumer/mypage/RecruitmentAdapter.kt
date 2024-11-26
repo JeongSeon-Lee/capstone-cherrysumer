@@ -1,7 +1,9 @@
 package com.cookandroid.cherrysumer.mypage
 
+import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,8 +70,10 @@ class RecruitmentAdapter(private val posts: MutableList<RecruitmentPost>, privat
         }
 
         private fun showPopupMenu(view: View, post: RecruitmentPost) {
+            val popupMenu = android.widget.PopupMenu(ContextThemeWrapper(view.context, R.style.AppTheme), view)
+
             // PopupMenu 생성 및 표시
-            val popupMenu = android.widget.PopupMenu(itemView.context, view)
+//            val popupMenu = android.widget.PopupMenu(itemView.context, view)
             val inflater = popupMenu.menuInflater
             inflater.inflate(R.menu.post_recruitment_menu, popupMenu.menu)
 
@@ -88,12 +92,16 @@ class RecruitmentAdapter(private val posts: MutableList<RecruitmentPost>, privat
                         true
                     }
                     R.id.menu_register -> {
-                        // 재고 등록 프래그먼트로 이동
-//                        val intent = Intent(itemView.context, InventoryRegisterActivity::class.java)
-                        // post 객체를 JSON으로 직렬화하여 전달
-//                        val postJson = Gson().toJson(post)
-//                        intent.putExtra("recruitmentPost", postJson)
-//                        itemView.context.startActivity(intent)
+                        val intent = Intent(itemView.context, MainActivity::class.java).apply {
+                            putExtra("source", "registerPostItem")
+                            putExtra("targetFragment", "InventoryInsertFragment")
+                            putExtra("productName", post.productname)
+                            putExtra("purchaseDate", post.date)
+                            putExtra("postId", post.postId)  // 필요시 수정
+                            putExtra("category", post.category ?: "default")
+                            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP // 기존 액티비티 재사용
+                        }
+                        (itemView.context as Activity).startActivity(intent)
                         true
                     }
                     else -> false

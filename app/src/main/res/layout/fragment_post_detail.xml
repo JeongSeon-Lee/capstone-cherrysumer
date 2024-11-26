@@ -409,7 +409,7 @@
             android:textColor="#FFFFFF"
             android:includeFontPadding="false"
             android:text="메신저"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <View
             android:layout_width="0dp"
@@ -427,7 +427,7 @@
             android:textColor="#FFFFFF"
             android:includeFontPadding="false"
             android:text="참여하기"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <android.widget.Button
             android:id="@+id/closed_button"
@@ -439,7 +439,7 @@
             android:textColor="#FFFFFF"
             android:includeFontPadding="false"
             android:text="마감하기"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
     </LinearLayout>
 
 

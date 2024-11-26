@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.cookandroid.cherrysumer.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,6 +31,8 @@ class Signup2Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 액티비티의 전체 배경색을 하얀색으로 설정
+        window.decorView.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         setContentView(R.layout.activity_join2)
 
         // View 초기화
