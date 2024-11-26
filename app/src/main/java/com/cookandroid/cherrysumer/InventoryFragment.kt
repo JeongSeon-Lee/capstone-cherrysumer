@@ -1,5 +1,6 @@
 package com.cookandroid.cherrysumer
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -15,6 +16,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.cookandroid.cherrysumer.databinding.FragmentInventoryBinding
+import com.cookandroid.cherrysumer.mypage.StatusActivity
 import com.google.android.material.tabs.TabLayout
 
 class InventoryFragment : Fragment() {
@@ -88,10 +90,8 @@ class InventoryFragment : Fragment() {
             popupView.findViewById<TextView>(R.id.menu_import_purchase).setOnClickListener {
                 popupWindow.dismiss()
                 // 게시글 가져오기 페이지 이동
-                val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction?.replace(R.id.fragment_container, PostListFragment())
-                transaction?.addToBackStack(null)
-                transaction?.commit()
+                val intent = Intent(requireContext(), StatusActivity::class.java)
+                startActivity(intent)
             }
 
             // 가로 크기 제한 (예: 200dp로 제한)

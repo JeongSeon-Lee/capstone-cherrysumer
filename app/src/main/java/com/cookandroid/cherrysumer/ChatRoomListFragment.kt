@@ -36,6 +36,9 @@ class ChatRoomListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation)
+        bottomNav?.visibility = View.VISIBLE
+
         // RecyclerView 초기화
         binding.recyclerViewChatRooms.layoutManager = LinearLayoutManager(requireContext())
 

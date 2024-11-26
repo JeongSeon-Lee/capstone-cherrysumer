@@ -17,6 +17,7 @@ import com.cookandroid.cherrysumer.retrofit.MyApplication
 import com.cookandroid.cherrysumer.retrofit.models.ChatMessage
 import com.cookandroid.cherrysumer.retrofit.models.ChatResponse
 import com.cookandroid.cherrysumer.retrofit.models.PostInfo
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.gson.Gson
 import io.reactivex.disposables.Disposable
 import org.json.JSONObject
@@ -76,23 +77,9 @@ class ChatMessageFragment : Fragment() {
         }
     }
 
-    private fun setupEditTextFocusListener() {
-        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation)
-
-        // EditText 포커스 변화 리스너 추가
-        binding.editTextMessage.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                // 포커스가 잡히면 하단 네비게이션 숨기기
-                bottomNav?.visibility = View.GONE
-            } else {
-                // 포커스가 해제되면 하단 네비게이션 보이기
-                bottomNav?.visibility = View.VISIBLE
-            }
-        }
-    }
-
     private fun setupUI() {
-        setupEditTextFocusListener()
+        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation)
+        bottomNav?.visibility = View.GONE
 
         binding.buttonSend.setOnClickListener {
             val message = binding.editTextMessage.text.toString().trim()
@@ -103,23 +90,6 @@ class ChatMessageFragment : Fragment() {
                 Toast.makeText(requireContext(), "메시지를 입력하세요.", Toast.LENGTH_SHORT).show()
             }
         }
-
-/*        val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation)
-        var isKeyboardVisible = false
-
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = android.graphics.Rect()
-            binding.root.getWindowVisibleDisplayFrame(rect)
-
-            val screenHeight = binding.root.rootView.height
-            val keypadHeight = screenHeight - rect.bottom
-
-            val keyboardNowVisible = keypadHeight > screenHeight * 0.25
-            if (keyboardNowVisible != isKeyboardVisible) {
-                isKeyboardVisible = keyboardNowVisible
-                bottomNav?.visibility = if (isKeyboardVisible) View.GONE else View.VISIBLE
-            }
-        }*/
     }
 
 
