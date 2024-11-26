@@ -81,7 +81,7 @@ class InventoryAdapter(
             else -> "D+${-daysLeft}"
         }
         binding.itemDday.setBackgroundColor(
-            if (daysLeft <= 3) Color.parseColor("#FF8B8B") else Color.TRANSPARENT
+            if (daysLeft <= 3) Color.parseColor("#FF8B8B") else Color.parseColor("#B4B4B4")
         )
 
         // density 사용하여 배경 크기와 마진 조정
