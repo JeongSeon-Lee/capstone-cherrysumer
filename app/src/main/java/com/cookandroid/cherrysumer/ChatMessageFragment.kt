@@ -32,6 +32,7 @@ class ChatMessageFragment : Fragment() {
     private lateinit var stompClient: ua.naiksoftware.stomp.StompClient
     private var subscription: Disposable? = null
     private var roomId: String? = null
+    private var userNickname: String? = null
     private var token: String? = null
     private var myId: Long? = null
 
@@ -49,6 +50,7 @@ class ChatMessageFragment : Fragment() {
         _binding = FragmentChatMessageBinding.inflate(inflater, container, false)
 
         roomId = arguments?.getString("ROOM_ID")
+        userNickname = arguments?.getString("USER_NICKNAME")
         token = MyApplication.getSavedToken()
 
         setupToolbar()
@@ -78,6 +80,8 @@ class ChatMessageFragment : Fragment() {
     }
 
     private fun setupUI() {
+        binding.toolbarTitle.text = userNickname
+
         val bottomNav = activity?.findViewById<View>(R.id.bottom_navigation)
         bottomNav?.visibility = View.GONE
 
@@ -126,9 +130,6 @@ class ChatMessageFragment : Fragment() {
                 try {
                     val gson = Gson()
                     val response = gson.fromJson(topicMessage.payload, ChatResponse::class.java)
-
-                    // partnerId를 툴바 제목으로 설정
-                    binding.toolbarTitle.text = response.partnerId.toString()
 
                     // myId 설정
                     myId = response.myId

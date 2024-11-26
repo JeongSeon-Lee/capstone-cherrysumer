@@ -11,7 +11,7 @@ import com.cookandroid.cherrysumer.models.ChatRoom
 
 class ChatRoomListAdapter(
     private var chatRooms: List<ChatRoom>,
-    private val onClick: (String) -> Unit
+    private val onClick: (roomId: String, userNickname: String) -> Unit
 ) : RecyclerView.Adapter<ChatRoomListAdapter.ChatRoomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomViewHolder {
@@ -39,7 +39,7 @@ class ChatRoomListAdapter(
         private val timeTextView: TextView = itemView.findViewById(R.id.textViewTime)
         private val badgeTextView: TextView = itemView.findViewById(R.id.overlayBadge)
 
-        fun bind(chatRoom: ChatRoom, onClick: (String) -> Unit) {
+        fun bind(chatRoom: ChatRoom, onClick: (String, String) -> Unit) {
             // 프로필 이미지 설정 (Glide 사용)
             Glide.with(itemView.context)
                 .load("http://3.39.110.119/${chatRoom.userProfileImageUrl}")
@@ -76,7 +76,7 @@ class ChatRoomListAdapter(
 
             // 아이템 클릭 이벤트 설정
             itemView.setOnClickListener {
-                onClick(chatRoom.chatRoomId)
+                onClick(chatRoom.chatRoomId, chatRoom.userNickname)
             }
         }
 

@@ -44,8 +44,8 @@ class ChatRoomListFragment : Fragment() {
 
         // 초기화된 채팅방 목록 데이터 (임시)
         val chatRooms = listOf<ChatRoom>() // 실제 데이터로 교체 필요
-        adapter = ChatRoomListAdapter(chatRooms) { roomId ->
-            navigateToChatMessage(roomId) // 클릭 이벤트에서 roomId 전달
+        adapter = ChatRoomListAdapter(chatRooms) { roomId, userNickname ->
+            navigateToChatMessage(roomId, userNickname) // 클릭 이벤트에서 roomId 전달
         }
         binding.recyclerViewChatRooms.adapter = adapter
 
@@ -168,10 +168,11 @@ class ChatRoomListFragment : Fragment() {
         })
     }
 
-    private fun navigateToChatMessage(roomId: String) {
+    private fun navigateToChatMessage(roomId: String, userNickname: String) {
         val fragment = ChatMessageFragment().apply {
             arguments = Bundle().apply {
                 putString("ROOM_ID", roomId)
+                putString("USER_NICKNAME", userNickname)
             }
         }
         parentFragmentManager.beginTransaction()
