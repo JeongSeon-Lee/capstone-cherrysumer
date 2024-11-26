@@ -19,7 +19,7 @@ data class PostInfo(
 )
 
 data class ChatMessage(
-    val id: Long,
+    val id: Long?,
     val senderId: Long,
     val date: String,
     val time: String,

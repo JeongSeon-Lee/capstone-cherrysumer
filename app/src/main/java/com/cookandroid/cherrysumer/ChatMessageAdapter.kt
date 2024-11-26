@@ -1,3 +1,4 @@
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,8 @@ class ChatMessageAdapter(private val messages: List<ChatMessage>, private val my
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.d("ChatMessageAdapter", "onBindViewHolder called for position: $position.")
+
         val message = messages[position]
 
         // 첫 번째 메시지거나 이전 메시지와 날짜가 다르면 날짜를 표시

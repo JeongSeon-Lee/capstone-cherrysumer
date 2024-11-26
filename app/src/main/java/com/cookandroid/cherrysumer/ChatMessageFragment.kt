@@ -128,15 +128,19 @@ class ChatMessageFragment : Fragment() {
         subscription = stompClient.topic("/sub/channel/$roomId").subscribe { topicMessage ->
             requireActivity().runOnUiThread {
                 try {
-                    val gson = Gson()
-                    val response = gson.fromJson(topicMessage.payload, ChatResponse::class.java)
+                    Log.d("ChatMessageFragment", "Raw payload: ${topicMessage.payload}")
+
+                    // JSON 파싱
+                    val jsonObject = JSONObject(topicMessage.payload)
 
                     // myId 설정
-                    myId = response.myId
+                    if (jsonObject.has("myId")) {
+                        myId = jsonObject.getLong("myId")
+                    }
 
                     // 어댑터 초기화
                     if (!::adapter.isInitialized) {
-                        adapter = ChatMessageAdapter(messageList, myId!!)
+                        adapter = ChatMessageAdapter(messageList, myId ?: -1)
                         binding.recyclerViewChat.layoutManager = LinearLayoutManager(requireContext())
                         binding.recyclerViewChat.adapter = adapter
                         Log.d("ChatMessageFragment", "Adapter initialized successfully")
@@ -145,13 +149,50 @@ class ChatMessageFragment : Fragment() {
                     }
 
                     // PostInfo 업데이트
-                    response.post?.let {
-                        Log.d("ChatMessageFragment", "Updating PostInfo: ${it.title}")
-                        updatePostInfo(it)
+                    if (jsonObject.has("post")) {
+                        val postObject = jsonObject.getJSONObject("post")
+                        val postInfo = PostInfo(
+                            postId = postObject.getLong("postId"),
+                            title = postObject.getString("title"),
+                            productname = postObject.getString("productname"),
+                            price = postObject.getInt("price"),
+                            place = postObject.getString("place"),
+                            date = postObject.getString("date"),
+                            imageUrl = postObject.optString("imageUrl", null)
+                        )
+                        updatePostInfo(postInfo)
                     }
 
-                    // 채팅 리스트 업데이트
-                    updateChatList(response.chatList)
+                    // chatList 또는 단일 메시지 파싱
+                    if (jsonObject.has("chatList")) {
+                        val chatListJsonArray = jsonObject.getJSONArray("chatList")
+                        val chatList = mutableListOf<ChatMessage>()
+                        for (i in 0 until chatListJsonArray.length()) {
+                            val chatMessageObject = chatListJsonArray.getJSONObject(i)
+                            val chatMessage = ChatMessage(
+                                id = if (chatMessageObject.isNull("id")) null else chatMessageObject.getLong("id"),
+                                senderId = chatMessageObject.getLong("senderId"),
+                                date = chatMessageObject.getString("date"),
+                                time = chatMessageObject.getString("time"),
+                                message = chatMessageObject.getString("message")
+                            )
+                            chatList.add(chatMessage)
+                        }
+                        Log.d("ChatMessageFragment", "Parsed chatList: $chatList")
+                        updateChatList(chatList)
+                    } else {
+                        // 단일 메시지 처리
+                        val chatMessage = ChatMessage(
+                            id = if (jsonObject.isNull("id")) null else jsonObject.getLong("id"),
+                            senderId = jsonObject.getLong("senderId"),
+                            date = jsonObject.getString("date"),
+                            time = jsonObject.getString("time"),
+                            message = jsonObject.getString("message")
+                        )
+                        Log.d("ChatMessageFragment", "Parsed single message: $chatMessage")
+                        updateChatList(listOf(chatMessage))
+                    }
+
                 } catch (e: Exception) {
                     Log.e("ChatMessageFragment", "Error processing message: ${e.message}", e)
                 }
@@ -171,18 +212,11 @@ class ChatMessageFragment : Fragment() {
             data.put("roomId", roomId)
             data.put("message", content)
 
-            val calendar = Calendar.getInstance()
-            val currentTime = String.format(
-                "%02d:%02d",
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE)
-            )
-
-            messageList.add(ChatMessage(0, myId!!, "", currentTime, content))
-            adapter.notifyItemInserted(messageList.size - 1)
-            binding.recyclerViewChat.scrollToPosition(messageList.size - 1)
-
-            stompClient.send("/pub/message", data.toString()).subscribe()
+            stompClient.send("/pub/message", data.toString()).subscribe({
+                Log.d("ChatMessageFragment", "Message sent successfully: $content")
+            }, { error ->
+                Log.e("ChatMessageFragment", "Error sending message: ${error.message}")
+            })
         } catch (e: Exception) {
             Log.e("ChatMessageFragment", "Error creating JSON: ${e.message}")
         }
@@ -208,9 +242,38 @@ class ChatMessageFragment : Fragment() {
     }
 
     private fun updateChatList(chatList: List<ChatMessage>) {
-        messageList.addAll(chatList)
+        Log.d("ChatMessageFragment", "updateChatList called with ${chatList.size} messages.")
+
+        // 기존 메시지와 비교하여 새 메시지만 필터링
+        val newMessages = chatList.filter { newMessage ->
+            messageList.none { existingMessage ->
+                existingMessage.senderId == newMessage.senderId &&
+                        existingMessage.date == newMessage.date &&
+                        existingMessage.time == newMessage.time &&
+                        existingMessage.message == newMessage.message
+            }
+        }
+
+        if (newMessages.isEmpty()) {
+            Log.d("ChatMessageFragment", "No new messages to add.")
+            return
+        }
+
+        // 새 메시지 추가
+        messageList.addAll(newMessages)
+        Log.d("ChatMessageFragment", "Added ${newMessages.size} new messages. Total messages: ${messageList.size}")
+
+        // RecyclerView에 변경 알림
         adapter.notifyDataSetChanged()
-        binding.recyclerViewChat.scrollToPosition(messageList.size - 1)
+
+        // 리스트의 마지막 항목으로 스크롤
+        if (messageList.isNotEmpty()) {
+            binding.recyclerViewChat.post {
+                val layoutManager = binding.recyclerViewChat.layoutManager as LinearLayoutManager
+                layoutManager.scrollToPositionWithOffset(messageList.size - 1, 0)
+                Log.d("ChatMessageFragment", "RecyclerView scrolled to position ${messageList.size - 1}.")
+            }
+        }
     }
 
     override fun onDestroyView() {
